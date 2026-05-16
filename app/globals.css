@@ -3,44 +3,102 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
+	--color-background: hsl(var(--background));
+	--color-foreground: hsl(var(--foreground));
 
-	--color-primary: var(--primary);
+	--color-primary: hsl(var(--primary));
+	--color-primary-hover: hsl(var(--primary-hover));
 
-	--color-card-light: var(--card-light);
-	--color-card-dark: var(--card-dark);
+	--color-card: hsl(var(--card));
+	--color-card2: hsl(var(--card-secondary));
+
+	--color-muted: hsl(var(--muted));
+	--color-muted-foreground: hsl(var(--muted-foreground));
+
+	--color-border: hsl(var(--border));
+
+	--color-success: hsl(var(--success));
+	--color-warning: hsl(var(--warning));
+	--color-danger: hsl(var(--danger));
 }
 
 :root {
-	--background: hsl(0, 0, 99%);
-	--foreground: #171717;
+	--background: 220 23% 97%;
+	--foreground: 220 15% 14%;
 
-	--primary: hsl(220.6, 100%, 59.4%);
+	--primary: 221 83% 53%;
+	--primary-hover: 221 83% 47%;
 
-	--card-light: hsl(0, 0%, 90%);
-	--card-dark: hsl(0, 0%, 80%);
+	--card: 0 0% 100%;
+	--card-secondary: 220 20% 95%;
+
+	--muted: 220 16% 93%;
+	--muted-foreground: 220 10% 40%;
+
+	--border: 0 0% 90%;
+
+	--success: 142 71% 45%;
+	--warning: 38 92% 50%;
+	--danger: 0 84% 60%;
 }
 
 .dark {
-	--background: hsl(0, 0%, 5.6%);
-	--foreground: #ededed;
+	--background: 220 18% 8%;
+	--foreground: 220 15% 92%;
 
-	--primary: hsl(226.5, 100%, 28.3%);
+	--primary: 217 91% 60%;
+	--primary-hover: 217 91% 66%;
 
-	--card-light: hsl(0, 0%, 30%);
-	--card-dark: hsl(0, 0%, 20%);
+	--card: 220 16% 11%;
+	--card-secondary: 220 14% 16%;
+
+	--muted: 220 14% 16%;
+	--muted-foreground: 220 10% 65%;
+
+	--border: 0 0% 17%;
+
+	--success: 142 70% 45%;
+	--warning: 38 92% 55%;
+	--danger: 0 84% 65%;
 }
 
 body {
-	background: var(--background);
-	color: var(--foreground);
+	background: hsl(var(--background));
+	color: hsl(var(--foreground));
+
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
+
 	text-rendering: optimizeLegibility;
 }
 
+button {
+	cursor: pointer;
+}
+
 button,
-input {
+input,
+textarea {
 	font: inherit;
+}
+
+* {
+	border-color: hsl(var(--border));
+}
+
+html{
+	scrollbar-width: thin;
+	scroll-behavior: smooth;
+	scrollbar-color: var(--color-foreground) transparent;
+}
+
+@keyframes PopIn{
+	from{
+		scale: 0.1;
+		opacity: 0.1;
+	}
+	to{
+		scale: 1;
+		opacity: 1;
+	}
 }

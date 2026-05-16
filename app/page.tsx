@@ -1,129 +1,203 @@
+"use client";
 import {
 	Bell,
 	BookOpenText,
-	CalendarDays,
-	CheckCircle2,
 	ChevronRight,
-	Clock3,
 	Compass,
-	Flame,
 	FolderKanban,
 	GalleryHorizontalEnd,
+	Laugh,
 	MessageCircle,
-	Mic2,
-	NotebookPenIcon,
-	PenLine,
 	Plus,
 	Search,
 	Send,
+	SendHorizonal,
 	Sparkles,
-	Star,
 	ThumbsUp,
-	TrendingUp,
 	User,
+	X,
 } from "lucide-react";
 import Image from "next/image";
+import * as fonts from "./fonts";
 
 import { ThemeToggle } from "./components/ThemeToggle";
-
-const navItems = [
-	{ label: "Today", icon: Compass, active: true },
-	{ label: "Library", icon: BookOpenText },
-	{ label: "Projects", icon: FolderKanban },
-	{ label: "Media", icon: GalleryHorizontalEnd },
-];
+import { useEffect, useRef, useState } from "react";
+import { useSettleExit } from "./hooks/useSettleExit";
+import { Comme } from "next/font/google";
 
 export default function Home() {
-	return (
-		<main className="min-h-screen overflow-hidden bg-[#f7f1e7] text-[#201a16] dark:bg-[#101316] dark:text-[#f7efe5]">
-			<div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_12%_18%,rgba(238,90,70,0.18),transparent_30%),radial-gradient(circle_at_80%_8%,rgba(58,147,139,0.22),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.76),rgba(242,229,206,0.62))] dark:bg-[radial-gradient(circle_at_16%_16%,rgba(238,90,70,0.2),transparent_30%),radial-gradient(circle_at_78%_4%,rgba(74,170,157,0.2),transparent_30%),linear-gradient(135deg,rgba(17,20,23,0.92),rgba(31,32,30,0.84))]" />
+	const [NotificationActive, setNotificationActive] = useState<boolean>(false);
+	const notificationRef = useRef<HTMLDivElement | null>(null);
+	const [CommentsBoard, setCommentsBoards] = useState<null | boolean>(null);
 
-			<section className="mx-auto grid min-h-screen w-full max-w-360 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)]">
-				<aside className="hidden border-r border-[#2f2419]/10 bg-[#fffaf0]/70 px-5 py-6 backdrop-blur-xl dark:border-white/10 dark:bg-[#15191b]/72 lg:block">
+	useSettleExit(notificationRef, () => {
+		setNotificationActive(false);
+	});
+
+	return (
+		<main className="min-h-screen overflow-hidden w-full bg-background text-foreground">
+			<section className="mx-auto grid min-h-screen w-full max-w-full grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] bg-[radial-gradient(circle_at_0px_0px,hsl(var(--primary)_/0.14),transparent_60%)]">
+				<aside className="hidden border-border border-r bg-card/70 py-6 backdrop-blur-xl lg:block sticky top-0 px-7">
 					<div className="flex items-center gap-3">
-						<div className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[#243d3a] text-[#f6c35f] shadow-lg shadow-[#243d3a]/20">
+						{/* <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-card shadow-lg shadow-primary/20">
 							<NotebookPenIcon size={22} className="-rotate-20" />
-						</div>
+						</div> */}
 						<div>
-							<p className="text-lg font-black leading-none tracking-[0.08em]">
+							<p className="text-lg font-black leading-none tracking-widest mt-4">
 								NotedLife
 							</p>
 						</div>
 					</div>
 
 					<nav className="mt-7 space-y-2">
-						{navItems.map((item) => (
-							<button
-								key={item.label}
-								className={`flex h-12 w-full items-center justify-between rounded-[8px] px-3 text-sm font-bold transition ${
-									item.active
-										? "bg-[#ca8a00] text-white shadow-lg shadow-[#ef5a46]/20"
-										: "text-[#5f4c41] hover:bg-[#fff4df] dark:text-[#cfc3b7] dark:hover:bg-white/8"
-								}`}
-							>
-								<span className="flex items-center gap-3">
-									<item.icon size={19} />
-									{item.label}
-								</span>
-								{item.active ? <ChevronRight size={17} /> : null}
-							</button>
-						))}
+						<button className="flex h-12 w-full items-center justify-between rounded-lg bg-primary px-3 text-sm font-bold text-card shadow-lg shadow-primary/20 transition">
+							<span className="flex items-center gap-3">
+								<Compass size={19} />
+								Today
+							</span>
+
+							<ChevronRight size={17} />
+						</button>
+
+						<button className="flex h-12 w-full items-center justify-between rounded-lg px-3 text-sm font-bold text-muted-foreground transition hover:bg-muted">
+							<span className="flex items-center gap-3">
+								<BookOpenText size={19} />
+								Library
+							</span>
+						</button>
+
+						<button className="flex h-12 w-full items-center justify-between rounded-lg px-3 text-sm font-bold text-muted-foreground transition hover:bg-muted">
+							<span className="flex items-center gap-3">
+								<FolderKanban size={19} />
+								Projects
+							</span>
+						</button>
+
+						<button className="flex h-12 w-full items-center justify-between rounded-lg px-3 text-sm font-bold text-muted-foreground transition hover:bg-muted">
+							<span className="flex items-center gap-3">
+								<GalleryHorizontalEnd size={19} />
+								Media
+							</span>
+						</button>
 					</nav>
 
-					<div className="mt-8 border-t border-[#2f2419]/10 pt-6 dark:border-white/10">
-						<p className="text-xs font-bold uppercase tracking-[0.18em] text-[#806a58] dark:text-[#b7a99d]">
+					<div className="mt-8 border-t border-border pt-6">
+						<p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
 							Spaces
 						</p>
 						<div className="mt-4 space-y-3 text-sm font-semibold">
-							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-[#4c3c33] hover:bg-[#fff4df] dark:text-[#d9cec2] dark:hover:bg-white/8">
+							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
 								Personal
 							</button>
 
-							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-[#4c3c33] hover:bg-[#fff4df] dark:text-[#d9cec2] dark:hover:bg-white/8">
+							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
 								Groups
 							</button>
 
-							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-[#4c3c33] hover:bg-[#fff4df] dark:text-[#d9cec2] dark:hover:bg-white/8">
+							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
 								Settings
 							</button>
 						</div>
 					</div>
 				</aside>
 
-				<div className="flex min-w-0 flex-col">
-					<header className="sticky top-0 z-20 border-b border-[#2f2419]/10 bg-[#f7f1e7]/82 px-4 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-[#101316]/80 sm:px-6">
+				<div className="flex min-w-1 flex-col">
+					<header className="sticky top-0 z-20 border-b border-border bg-background/82 px-4 py-3 backdrop-blur-xl sm:px-6">
 						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#243d3a] text-[#f6c35f] lg:hidden">
+							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-card lg:hidden">
 								<Sparkles size={20} />
 							</div>
 
-							<label className="flex h-11 min-w-0 flex-1 items-center gap-3 rounded-lg border border-[#2f2419]/10 bg-white/76 px-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/8">
-								<Search size={18} className="shrink-0 text-[#7f6a59]" />
+							<label className="flex h-11 min-w-0 flex-1 items-center gap-3 rounded-lg border border-border bg-card/76 px-3 text-sm shadow-sm">
+								<Search size={18} className="shrink-0 text-muted-foreground" />
 								<input
 									type="text"
 									placeholder="Search anything..."
-									className="min-w-0 flex-1 bg-transparent font-semibold outline-none placeholder:text-[#8a7766] dark:placeholder:text-[#b6aa9e]"
+									className="min-w-0 flex-1 bg-transparent font-semibold outline-none placeholder:text-muted-foreground"
 								/>
 							</label>
 
-							<button className="hidden h-11 items-center gap-2 rounded-lg bg-[#201a16] px-4 text-sm font-bold text-[#fff7e8] shadow-lg shadow-[#201a16]/15 transition hover:-translate-y-0.5 dark:bg-[#f7efe5] dark:text-[#15191b] sm:flex">
+							<button className="hidden h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-background shadow-lg shadow-primary/15 transition hover:-translate-y-0.5 sm:flex">
 								<Plus size={18} />
 								New post
 							</button>
 
-							<button className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#2f2419]/10 bg-white/76 shadow-sm dark:border-white/10 dark:bg-white/8">
-								<Bell size={19} />
-							</button>
+							<div className="relative" ref={notificationRef}>
+								<button
+									className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-card/76 shadow-sm"
+									onClick={() => {
+										setNotificationActive((current) => !current);
+									}}
+								>
+									<Bell size={19} />
+								</button>
+
+								{NotificationActive && (
+									<div className="absolute right-0 top-full mt-3 flex flex-col min-w-80 bg-card/97 border border-border p-3 rounded-2xl shadow-xl z-50 min-h-70 max-h-100 animate-[PopIn_0.08s_ease-out]">
+										<div className="flex flex-row justify-between border-b border-border pb-3">
+											<section className={`${fonts.exo2.className}`}>
+												Notification
+											</section>
+											<section>
+												<Bell size={20} />
+											</section>
+										</div>
+
+										<div
+											className={`mt-8 opacity-50 w-full flex flex-row justify-center ${fonts.inconsolata.className} tracking-wide`}
+										>
+											Nothing more to view
+										</div>
+									</div>
+								)}
+							</div>
 
 							<ThemeToggle />
 						</div>
 					</header>
 
-					<section className="flex w-full flex-1 justify-center px-4 py-6">
-						<article className="w-full  overflow-hidden rounded-3xl border border-card-light bg-card p-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+					<section className="flex w-full flex-1 justify-center px-4 py-6 flex-col gap-7 items-center ">
+						{CommentsBoard && (
+							<section className="fixed z-50 flex w-full h-full items-center justify-center">
+								<div className="relative flex flex-col w-125 max-w-[95vw] h-130 rounded-2xl border border-border bg-card/90 shadow-xl animate-[PopIn_120ms_ease-out] overflow-hidden backdrop-blur-lg">
+									<div className="flex items-center justify-between border-b border-border px-4 py-3">
+										<span className={fonts.cabin.className}>Comments</span>
+
+										<button
+											onClick={() => setCommentsBoards(null)}
+											className="p-1 rounded-md hover:bg-muted transition"
+										>
+											<X size={18} />
+										</button>
+									</div>
+
+									<div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">
+										No comments yet.
+									</div>
+
+									<div className="border-t border-border p-3">
+										<div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2 focus-within:ring-2 focus-within:ring-primary/30">
+											<input
+												type="text"
+												placeholder="Write a comment..."
+												className={`flex-1 bg-transparent outline-none text-sm ${fonts.cabin.className}`}
+											/>
+											<button>
+												<SendHorizonal size={18}/>
+											</button>
+											<button className="text-muted-foreground hover:text-foreground transition">
+												<Laugh size={18} />
+											</button>
+										</div>
+									</div>
+								</div>
+							</section>
+						)}
+
+						<section className="w-full max-w-210  overflow-hidden rounded-3xl border border-border bg-card p-4 shadow-lg shadow-foreground/2 transition hover:shadow-xl">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-3">
-									<div className="flex h-11 w-11 items-center justify-center rounded-full bg-card-dark text-foreground">
+									<div className="flex h-11 w-11 items-center justify-center rounded-full bg-card2 text-foreground">
 										<User size={20} />
 									</div>
 
@@ -136,41 +210,72 @@ export default function Home() {
 									</div>
 								</div>
 
-								<button className="rounded-full p-2 transition hover:bg-black/5 dark:hover:bg-white/10">
+								<button className="rounded-full p-2 transition hover:bg-muted">
 									•••
 								</button>
 							</div>
 
 							<div className="mt-4 flex flex-col items-start text-left">
 								<p className="text-[15px] font-medium leading-relaxed text-foreground/90">
-									My sister! 📸
+									worshsflh 📸
 								</p>
 							</div>
 
-							<div className="mt-4 overflow-hidden rounded-2xl border border-black/5 dark:border-white/10">
-								<Image
-									src="/ishowspeed.jpg"
-									alt="Post image"
-									width={900}
-									height={900}
-									className="h-auto max-h-125 w-full object-cover transition duration-300 hover:scale-[1.015]"
-								/>
+							<div className="grid grid-cols-[2fr_1fr] max-w-200 rounded-2xl overflow-hidden mt-4 h-100">
+								<div className=" overflow-hidden  border border-border">
+									<Image
+										src="/ishowspeed.jpg"
+										alt="Post image"
+										width={900}
+										height={900}
+										className="h-auto max-h-125 w-full object-cover transition duration-300 hover:scale-[1.015] pointer-events-none"
+										loading="eager"
+									/>
+								</div>
+
+								<div className="overflow-hidden grid grid-rows-2 border-border">
+									<div className=" overflow-hidden border border-border">
+										<Image
+											src="/ishowspeed.jpg"
+											alt="Post image"
+											width={900}
+											height={900}
+											className="h-auto max-h-125 w-full object-cover transition duration-300 hover:scale-[1.015] pointer-events-none"
+											loading="eager"
+										/>
+									</div>
+									<div className=" overflow-hidden border border-border">
+										<Image
+											src="/ishowspeed.jpg"
+											alt="Post image"
+											width={900}
+											height={900}
+											className="h-auto max-h-125 w-full object-cover transition duration-300 hover:scale-[1.015] pointer-events-none"
+											loading="eager"
+										/>
+									</div>
+								</div>
 							</div>
 
-							<div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 dark:border-white/10">
-								<button className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-black/5 dark:hover:bg-white/10">
-									<ThumbsUp size={20}/> Like
+							<div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+								<button className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-muted">
+									<ThumbsUp size={20} /> Like
 								</button>
 
-								<button className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-black/5 dark:hover:bg-white/10">
-								<MessageCircle size={20}/> Comment
+								<button
+									className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-muted"
+									onClick={() => {
+										setCommentsBoards(true);
+									}}
+								>
+									<MessageCircle size={20} /> Comment
 								</button>
 
-								<button className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-black/5 dark:hover:bg-white/10">
-									<Send size={20}/> Share
+								<button className="flex flex-1 flex-row gap-2 items-center justify-center rounded-xl py-2 text-sm font-medium transition hover:bg-muted">
+									<Send size={20} /> Share
 								</button>
 							</div>
-						</article>
+						</section>
 					</section>
 				</div>
 			</section>
