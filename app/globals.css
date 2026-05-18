@@ -16,6 +16,7 @@
 	--color-muted-foreground: hsl(var(--muted-foreground));
 
 	--color-border: hsl(var(--border));
+	--color-border-hard: hsl(var(--border-hard));
 
 	--color-success: hsl(var(--success));
 	--color-warning: hsl(var(--warning));
@@ -35,7 +36,8 @@
 	--muted: 220 16% 93%;
 	--muted-foreground: 220 10% 40%;
 
-	--border: 0 0% 90%;
+	--border: 0 0% 87%;
+	--border-hard: 220 13% 85%;
 
 	--success: 142 71% 45%;
 	--warning: 38 92% 50%;
@@ -56,6 +58,7 @@
 	--muted-foreground: 220 10% 65%;
 
 	--border: 0 0% 17%;
+	--border-hard: 220 10% 28%;
 
 	--success: 142 70% 45%;
 	--warning: 38 92% 55%;
@@ -86,18 +89,18 @@ textarea {
 	border-color: hsl(var(--border));
 }
 
-html{
+html {
 	scrollbar-width: thin;
 	scroll-behavior: smooth;
 	scrollbar-color: var(--color-foreground) transparent;
 }
 
-@keyframes PopIn{
-	from{
+@keyframes PopIn {
+	from {
 		scale: 0.1;
 		opacity: 0.1;
 	}
-	to{
+	to {
 		scale: 1;
 		opacity: 1;
 	}

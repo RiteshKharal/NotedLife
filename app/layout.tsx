@@ -17,11 +17,10 @@ export default function RootLayout({
 			lang="en"
 			className="h-full antialiased"
 			suppressHydrationWarning
+			data-scroll-behavior="smooth"
 		>
 			<body className="min-h-full flex flex-col">
-				<ThemeProviderWrapper>
-					{children}
-				</ThemeProviderWrapper>
+				<ThemeProviderWrapper>{children}</ThemeProviderWrapper>
 			</body>
 		</html>
 	);
