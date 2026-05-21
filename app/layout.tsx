@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProviderWrapper } from "./providers/ThemeProvider";
 
 export const metadata: Metadata = {
-	title: "NoteLife",
+	title: "NotedLife",
 	description: "A beautiful workspace for notes, rituals, and ideas.",
 };
 

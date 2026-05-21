@@ -16,7 +16,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 import { useRef, useState } from "react";
 import { useSettleExit } from "../hooks/useSettleExit";
 import * as fonts from "../fonts";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function MainLayout({
 	children,
@@ -24,7 +24,7 @@ export default function MainLayout({
 	children: React.ReactNode;
 }) {
 	const [NotificationActive, setNotificationActive] = useState<boolean>(false);
-
+	const pathname = usePathname();
 	const notificationRef = useRef<HTMLDivElement | null>(null);
 
 	useSettleExit(notificationRef, () => {
@@ -38,14 +38,14 @@ export default function MainLayout({
 			<section className="mx-auto grid min-h-screen w-full max-w-full grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] bg-[radial-gradient(circle_at_0px_0px,hsl(var(--primary)_/0.1),transparent_60%)] -z-1">
 				<aside className="hidden border-border border-r bg-card/70 py-6 backdrop-blur-xl lg:block sticky top-0 px-7">
 					<div>
-						<p className="text-lg font-black leading-none tracking-widest mt-4">
+						<p className="text-lg font-black leading-none tracking-wide mt-4">
 							NotedLife
 						</p>
 					</div>
 
 					<nav className="mt-10 space-y-5">
 						<button
-							className="flex h-12 w-full items-center justify-between rounded-lg  hover:bg-muted px-3 text-sm font-bold text-muted-foreground transition"
+							className={`flex h-12 w-full items-center justify-between rounded-lg   px-3 text-sm font-bold  transition ${pathname.endsWith("/") && pathname.length === 1 ? "text-background bg-primary hover:bg-primary-hover shadow-primary/15 shadow-lg" : "text-muted-foreground hover:bg-muted"}`}
 							onClick={() => {
 								router.push("/");
 							}}
@@ -57,7 +57,7 @@ export default function MainLayout({
 						</button>
 
 						<button
-							className="flex h-12 w-full items-center justify-between rounded-lg px-3 text-sm font-bold text-muted-foreground transition hover:bg-muted"
+							className={`flex h-12 w-full items-center justify-between rounded-lg px-3 text-sm font-bold  transition hover:bg-muted ${pathname.startsWith("/library") ? "bg-primary  shadow-primary/15 shadow-lg  hover:bg-primary-hover  text-background" : "text-muted-foreground"}`}
 							onClick={() => {
 								router.push("/library");
 							}}
@@ -89,15 +89,20 @@ export default function MainLayout({
 						</p>
 
 						<div className="mt-4 space-y-3 text-sm font-semibold">
-							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
+							{/* <button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
 								Personal
 							</button>
 
 							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
 								Groups
-							</button>
+							</button> */}
 
-							<button className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted">
+							<button
+								className={`flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-foreground hover:bg-muted ${pathname.startsWith("/settings") ? "" : ""}`}
+								onClick={() => {
+									router.push("/settings");
+								}}
+							>
 								Settings
 							</button>
 						</div>
@@ -107,10 +112,6 @@ export default function MainLayout({
 				<div className="flex min-w-1 flex-col">
 					<header className="sticky top-0 z-20 border-b border-border bg-background/82 px-4 py-3 backdrop-blur-xl sm:px-6">
 						<div className="flex items-center gap-3">
-							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-card lg:hidden">
-								<Sparkles size={20} />
-							</div>
-
 							<label className="flex h-11 min-w-0 flex-1 items-center gap-3 rounded-lg border border-border bg-card/76 px-3 text-sm shadow-sm">
 								<Search size={18} className="shrink-0 text-muted-foreground" />
 
@@ -122,7 +123,7 @@ export default function MainLayout({
 							</label>
 
 							<button
-								className="hidden h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-background shadow-lg shadow-primary/15 transition hover:-translate-y-0.5 sm:flex "
+								className="hidden h-11 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-background shadow-lg shadow-primary/15 transition  sm:flex hover:bg-primary-hover"
 								onClick={() => {
 									router.push("/post");
 								}}
@@ -154,7 +155,7 @@ export default function MainLayout({
 										</div>
 
 										<div
-											className={`mt-8 opacity-50 w-full flex flex-row justify-center ${fonts.inconsolata.className} tracking-wide`}
+											className={`mt-8 opacity-50 w-full flex flex-row justify-center ${fonts.inter.className} tracking-wide`}
 										>
 											Nothing more to view
 										</div>
@@ -162,7 +163,16 @@ export default function MainLayout({
 								)}
 							</div>
 
-							<ThemeToggle />
+							<button
+								className="
+								hidden sm:flex h-11 items-center justify-center rounded-xl border border-primary/15 bg-primary px-5 text-sm font-semibold text-background shadow-sm transition-all duration-200 hover:bg-primary-hover hover:shadow-md active:scale-[0.985]
+							"
+								onClick={() => {
+									router.push("/signup");
+								}}
+							>
+								Sign up
+							</button>
 						</div>
 					</header>
 

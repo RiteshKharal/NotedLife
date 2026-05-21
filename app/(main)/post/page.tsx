@@ -28,7 +28,7 @@ export default function Page() {
 					console.log([...formdata.entries()]);
 				}}
 			>
-				<div className="border-2 border-border p-5 rounded-2xl scale-105 w-210 mt-10">
+				<div className="border-2 border-border p-5 rounded-2xl scale-105 lg:w-210 md:w-70   mt-10">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-3">
 							<div className="flex h-11 w-11 items-center justify-center rounded-full bg-card2 text-foreground">
@@ -102,38 +102,40 @@ export default function Page() {
 						</div>
 					</div>
 
-					<div className="mt-10 flex items-center justify-end mb-3 border-t border-border pt-4">
+					<div className="mt-8 flex items-center justify-between border-t border-border/60 pt-6">
+						<p className="text-sm text-foreground/40">
+							{images?.length || "0"} image{images?.length !== 1 && "s"}{" "}
+							selected
+						</p>
+
 						<button
-							className="
-                                group relative overflow-hidden rounded-2xl
-                                bg-primary px-6 py-3
-                                mt-2
-                                shadow-[0_0_35px_hsl(var(--primary)/0.25)]
-                                transition-all duration-300
-                                hover:scale-[1.03]
-                                hover:shadow-[0_0_45px_hsl(var(--primary)/0.5)]
-                                active:scale-[0.98]"
 							type="submit"
+							className="
+									group relative overflow-hidden
+									rounded-2xl px-7 py-3.5
+									bg-primary font-semibold text-background
+									shadow-[0_10px_40px_hsl(var(--primary)/0.15)]
+									transition-all duration-300
+									hover:-translate-y-0.5
+									hover:shadow-[0_18px_20px_hsl(var(--primary)/0.05)]
+									active:scale-[0.97]
+								"
 						>
 							<div
 								className="
-                                absolute inset-0 opacity-0 transition-opacity duration-300
-                                group-hover:opacity-20
-                                bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.18),transparent)]
-                            "
+										absolute inset-0 opacity-0 transition duration-300
+										group-hover:opacity-100
+										bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.18),transparent)]
+									"
 							/>
 
 							<span
-								className={`
-                                relative flex items-center gap-2
-                                text-lg font-semibold tracking-wide text-background
-                                ${fonts.cabin.className}
-                            `}
+								className={`relative flex items-center gap-2 text-[15px] tracking-wide ${fonts.cabin.className}`}
 							>
-								Post
+								Publish Post
 								<Send
-									size={18}
-									className="transition-transform duration-300 group-hover:translate-x-1"
+									size={17}
+									className="transition group-hover:translate-x-1"
 								/>
 							</span>
 						</button>
