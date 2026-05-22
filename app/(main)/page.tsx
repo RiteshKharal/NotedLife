@@ -17,6 +17,8 @@ export default function Home() {
 		setCommentsBoards(false)
 	})
 
+
+
 	return (
 		<section className="flex w-full flex-1 justify-center px-4 py-6 flex-col gap-7 items-center">
 			{CommentsBoard && (
