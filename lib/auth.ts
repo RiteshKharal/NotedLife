@@ -11,14 +11,12 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 export const auth = betterAuth({
-	
 	emailAndPassword: {
 		enabled: true,
 	},
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
-	plugins:[
-		dash()
-	]
+	trustedOrigins: ["http://localhost:3000", "https://notedlife.vercel.app/"],
+	plugins: [dash()],
 });

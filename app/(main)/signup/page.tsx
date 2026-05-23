@@ -1,13 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import * as fonts from "@/app/fonts";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AuthClient } from "@/lib/auth-client";
+import { useAtom } from "jotai";
+import { GetSession } from "@/app/actions/session";
 
 export default function Page() {
 	const router = useRouter();
+	const session = GetSession();
 
 	async function HandleSignUp(formdata: {
 		name: string;
@@ -23,6 +26,12 @@ export default function Page() {
 
 		console.log(data, error);
 	}
+
+	useEffect(() => {
+		if (session !== null) {
+			router.push("/")
+		}
+	}, [router, session]);
 
 	return (
 		<div
