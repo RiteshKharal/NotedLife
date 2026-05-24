@@ -1,201 +1,161 @@
 "use client";
 
-import React, { useEffect } from "react";
-import * as fonts from "@/app/fonts";
-import { ArrowRight, Lock, Mail, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight, Loader, Lock, Mail, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AuthClient } from "@/lib/auth-client";
-import { useAtom } from "jotai";
 import { GetSession } from "@/app/actions/session";
-
+import * as fonts from "@/app/fonts";
+import { ValidateFormData } from "@/app/logics/Validator";
 export default function Page() {
 	const router = useRouter();
 	const session = GetSession();
+	const [pending, setPending] = useState(false);
+	const [error, setError] = useState<null | string>(null);
 
-	async function HandleSignUp(formdata: {
-		name: string;
-		email: string;
-		password: string;
-	}) {
-		const { data, error } = await AuthClient.signUp.email({
-			name: formdata.name,
-			email: formdata.email,
-			password: formdata.password,
-			callbackURL: "/dashboard",
+	async function HandleSignUp(formdata: FormData) {
+		setPending(true);
+		setError(null);
+
+		const ValidatedData = ValidateFormData(formdata, (msg) => {
+			setError(msg);
 		});
 
-		console.log(data, error);
+		if (!ValidatedData) {
+			setPending(false);
+			return;
+		}
+
+		const name = ValidatedData.get("name") as string;
+		const email = ValidatedData.get("email") as string;
+		const password = ValidatedData.get("password") as string;
+
+		const { data, error } = await AuthClient.signUp.email({
+			name,
+			email,
+			password,
+			callbackURL: "/",
+		});
+
+		if (error) {
+			setError(error.message || "Something went wrong");
+		}
+
+		setPending(false);
 	}
 
 	useEffect(() => {
-		if (session !== null) {
-			router.push("/")
+		if (session?.user) {
+			router.push("/");
 		}
 	}, [router, session]);
 
 	return (
-		<div
-			className={`
-				flex min-h-screen items-center justify-center
-				bg-background px-4 py-10
-				${fonts.geistSans.className}
-			`}
-		>
-			<div
-				className="
-					w-full max-w-150 overflow-hidden
-					rounded-[2rem]
-					border border-border
-					bg-card
-					shadow-xl
-				"
-			>
-				<div className="border-b border-border px-8 pt-8 pb-6">
-					<h1
-						className={`
-							text-3xl font-bold tracking-tight
-							${fonts.geistSans.className}
-						`}
-					>
+		<div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+			<div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/6 transition-all transform- duration-300">
+				<div className="border-b border-border px-6 py-6 sm:px-8">
+					<p className="text-sm font-semibold text-primary">NotedLife</p>
+					<h1 className="mt-2 text-2xl font-bold tracking-tight">
 						Create account
 					</h1>
+					<p className="mt-2 text-sm text-muted-foreground">
+						Start sharing and saving your favorite moments.
+					</p>
 				</div>
 
 				<form
 					action={(formdata) => {
-						HandleSignUp({
-							name: formdata.get("name") as string,
-							email: formdata.get("email") as string,
-							password: formdata.get("password") as string,
-						});
+						HandleSignUp(formdata);
 					}}
-					className="px-8 py-7"
+					className="px-6 py-6 sm:px-8"
+					noValidate
 				>
-					<div className="flex flex-col gap-5">
+					<div className="flex flex-col gap-5 mb-8">
 						<div className="flex flex-col gap-2">
-							<label
-								className={`
-									text-sm font-medium text-foreground/70
-									${fonts.comfortaa.className}
-								`}
-							>
+							<label className="text-sm font-semibold text-foreground">
 								Name
 							</label>
 
-							<div
-								className="
-									flex h-13 items-center gap-3
-									rounded-xl border border-border
-									bg-background px-4
-									transition focus-within:border-primary
-								"
-							>
-								<User size={18} className="text-foreground/40" />
+							<div className="flex h-12 items-center gap-3 rounded-xl border border-border bg-background px-4 transition focus-within:border-primary/70 focus-within:ring-4 focus-within:ring-primary/10">
+								<User size={18} className="text-muted-foreground" />
 
 								<input
 									type="text"
 									name="name"
 									placeholder="Enter your name"
-									className="
-										w-full bg-transparent
-										text-[15px]
-										outline-none rounded-lg px-1
-										placeholder:text-foreground/35
-									"
+									className="w-full rounded-lg bg-transparent px-1 text-[15px] outline-none placeholder:text-muted-foreground"
 								/>
 							</div>
 						</div>
 
 						<div className="flex flex-col gap-2">
-							<label
-								className={`
-									text-sm font-medium text-foreground/70
-									${fonts.comfortaa.className}
-								`}
-							>
+							<label className="text-sm font-semibold text-foreground">
 								Email
 							</label>
 
-							<div
-								className="
-									flex h-13 items-center gap-3
-									rounded-xl border border-border
-									bg-background px-4
-									transition focus-within:border-primary
-								"
-							>
-								<Mail size={18} className="text-foreground/40" />
+							<div className="flex h-12 items-center gap-3 rounded-xl border border-border bg-background px-4 transition focus-within:border-primary/70 focus-within:ring-4 focus-within:ring-primary/10">
+								<Mail size={18} className="text-muted-foreground" />
 
 								<input
 									type="email"
 									name="email"
 									placeholder="Enter your email"
-									className="
-										w-full bg-transparent
-										text-[15px]
-										outline-none rounded-lg px-1
-										placeholder:text-foreground/35
-									"
+									className="w-full rounded-lg bg-transparent px-1 text-[15px] outline-none placeholder:text-muted-foreground"
 								/>
 							</div>
 						</div>
 
 						<div className="flex flex-col gap-2">
-							<label
-								className={`
-									text-sm font-medium text-foreground/70
-									${fonts.comfortaa.className}
-								`}
-							>
+							<label className="text-sm font-semibold text-foreground">
 								Password
 							</label>
 
-							<div
-								className="
-									flex h-13 items-center gap-3
-									rounded-xl border border-border
-									bg-background px-4 
-									transition focus-within:border-primary
-								"
-							>
-								<Lock size={18} className="text-foreground/40" />
+							<div className="flex h-12 items-center gap-3 rounded-xl border border-border bg-background px-4 transition focus-within:border-primary/70 focus-within:ring-4 focus-within:ring-primary/10">
+								<Lock size={18} className="text-muted-foreground" />
 
 								<input
 									type="password"
 									name="password"
 									placeholder="Create a password"
-									className="
-										w-full bg-transparent
-										text-[15px]
-										outline-none
-                                        rounded-lg  px-1
-										placeholder:text-foreground/35
-									"
+									className="w-full rounded-lg bg-transparent px-1 text-[15px] outline-none placeholder:text-muted-foreground"
 								/>
 							</div>
 						</div>
 					</div>
 
+					{/* {error && (
+						<div
+							className={`text-danger text-[0.94rem] font-bold ${fonts.cabin.className} animate-[FadeIn_300ms_ease-out]`}
+						>
+							{error}
+						</div>
+					)} */}
+
+					<div
+						className={`text-danger text-[0.94rem] font-bold ${fonts.cabin.className} ${error ? "animate-[FadeIn_300ms_ease-out]" : ""} min-h-6`}
+					>
+						{error}
+					</div>
 					<button
 						type="submit"
-						className="
-							mt-8 flex h-13 w-full items-center
-							justify-center gap-2
-							rounded-xl bg-primary
-							text-sm font-semibold text-background
-							transition-all duration-200
-							hover:bg-primary-hover
-							active:scale-[0.99] group
-						"
+						className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
 					>
-						Create account
-						<ArrowRight
-							size={17}
-							className="transition-transform group-hover:translate-x-2"
-						/>
+						{pending ? (
+							<>
+								<Loader className="animate-[Rotate360_5s_ease-out_infinite]" />
+							</>
+						) : (
+							<>
+								Create account
+								<ArrowRight
+									size={17}
+									className="transition-transform group-hover:translate-x-2"
+								/>
+							</>
+						)}
 					</button>
 
-					<div className="mt-6 text-center text-sm text-foreground/50">
+					<div className="mt-6 text-center text-sm text-muted-foreground">
 						Already have an account?{" "}
 						<button
 							type="button"
