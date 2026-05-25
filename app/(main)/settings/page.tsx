@@ -1,7 +1,10 @@
 "use client";
+
 import React from "react";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
-import { Bell, Palette, Shield } from "lucide-react";
+import ProfilePicture from "./components/ProfilePicture";
+
+import { Palette, Star } from "lucide-react";
 
 export default function Page() {
 	return (
@@ -9,14 +12,16 @@ export default function Page() {
 			<div className="mx-auto flex max-w-3xl flex-col gap-6">
 				<header>
 					<h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+
 					<p className="mt-2 text-sm text-muted-foreground">
 						Manage your experience and account preferences.
 					</p>
 				</header>
 
-				<section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-black/[0.025]">
+				<section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-black/2.5">
 					<div className="border-b border-border px-5 py-4">
 						<h2 className="text-sm font-semibold">Appearance</h2>
+
 						<p className="mt-1 text-sm text-muted-foreground">
 							Choose a comfortable theme for your feed.
 						</p>
@@ -27,47 +32,56 @@ export default function Page() {
 							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
 								<Palette size={19} />
 							</div>
+
 							<div>
 								<p className="text-sm font-semibold">Theme</p>
+
 								<p className="text-sm text-muted-foreground">
 									Switch between light and dark mode.
 								</p>
 							</div>
 						</div>
+
 						<ThemeToggle />
 					</div>
 				</section>
 
-				<section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-black/[0.025]">
+				<section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-black/2.5">
 					<div className="border-b border-border px-5 py-4">
 						<h2 className="text-sm font-semibold">Account</h2>
 					</div>
 
-					<div className="divide-y divide-border">
-						<div className="flex items-center gap-3 px-5 py-4">
-							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card2 text-muted-foreground">
-								<Bell size={19} />
-							</div>
-							<div>
-								<p className="text-sm font-semibold">Notifications</p>
-								<p className="text-sm text-muted-foreground">
-									No notification preferences configured yet.
-								</p>
+					<section className="flex flex-col mb-5">
+						<div className="flex items-center justify-between gap-3 px-5 py-6">
+							<div className="flex gap-3">
+								<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card2 text-muted-foreground">
+									<Star size={19} />
+								</div>
+
+								<div>
+									<p className="text-sm font-semibold">Personalization</p>
+
+									<p className="text-sm text-muted-foreground">
+										Customize your public profile appearance.
+									</p>
+								</div>
 							</div>
 						</div>
 
-						<div className="flex items-center gap-3 px-5 py-4">
-							<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card2 text-muted-foreground">
-								<Shield size={19} />
-							</div>
-							<div>
-								<p className="text-sm font-semibold">Privacy</p>
-								<p className="text-sm text-muted-foreground">
-									Account controls will appear here when available.
-								</p>
+						<div className="border-l-2  border-foreground rounded-b-2xl mx-10 flex flex-col">
+							<div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between  pl-12  ">
+								<div>
+									<h3 className="text-sm font-semibold">Profile Picture</h3>
+
+									<p className="mt-1 max-w-xs text-sm text-muted-foreground">
+										Upload a image suiting your profile.
+									</p>
+								</div>
+
+								<ProfilePicture />
 							</div>
 						</div>
-					</div>
+					</section>
 				</section>
 			</div>
 		</div>
