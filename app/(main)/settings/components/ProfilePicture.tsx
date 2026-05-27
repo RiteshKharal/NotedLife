@@ -4,16 +4,20 @@ import React, { useRef, useState } from "react";
 import { Camera, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { PostPfp } from "@/app/actions/PostPfp";
+import { GetSession } from "@/app/actions/session";
 
 type State = "idle" | "uploading";
 
 export default function ProfilePicture() {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const session = GetSession()
 
 	const [open, setOpen] = useState(false);
 	const [state, setState] = useState<State>("idle");
 	const [preview, setPreview] = useState<string | null>(null);
 	const [file, setFile] = useState<File | null>(null);
+	const [error, setError] = useState<null | string>(null);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const selected = e.target.files?.[0];
@@ -27,14 +31,12 @@ export default function ProfilePicture() {
 
 	const save = async () => {
 		if (!file) return;
+		const formdata = new FormData();
+		formdata.append("file", file);
 
 		setState("uploading");
 
-		const path = `profile-picture/${Date.now()}-${file.name}`;
-
-		const { error } = await supabase.storage
-			.from("profile")
-			.upload(path, file);
+		const { data, error } = await PostPfp(formdata);
 
 		setState("idle");
 		setOpen(false);
@@ -42,7 +44,8 @@ export default function ProfilePicture() {
 		setFile(null);
 
 		if (error) {
-			console.log(error.message);
+			setError(error);
+			throw error;
 		}
 	};
 
@@ -57,7 +60,7 @@ export default function ProfilePicture() {
 		<>
 			<button
 				onClick={() => setOpen(true)}
-				className="flex items-center gap-2 rounded-xl border border-border bg-linear-to-b from-card to-card/70 px-5 py-2.5 text-sm font-medium"
+				className={`flex items-center gap-2 rounded-xl border border-border bg-linear-to-b from-card to-card/70 px-5 py-2.5 text-sm font-medium ${!session?.user && "cursor-not-allowed"}`}
 			>
 				<Camera size={16} />
 				Change photo
@@ -73,7 +76,7 @@ export default function ProfilePicture() {
 
 			{open && (
 				<div
-					className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md"
+					className="fixed inset-0 z-50 flex items-center justify-center bg-black/4 backdrop-blur-md"
 					onClick={(e) => e.target === e.currentTarget && close()}
 				>
 					<div className="w-full max-w-110 overflow-hidden rounded-2xl border border-border/60 bg-card">
@@ -81,7 +84,10 @@ export default function ProfilePicture() {
 							<p className="text-sm font-semibold">Profile photo</p>
 
 							<button onClick={close}>
-								<X size={20} className="text-muted-foreground hover:text-foreground" />
+								<X
+									size={20}
+									className="text-muted-foreground hover:text-foreground"
+								/>
 							</button>
 						</div>
 
@@ -114,15 +120,17 @@ export default function ProfilePicture() {
 								)}
 							</div>
 
-							<p className="text-xs text-muted-foreground">
-								Upload an image
+							<p
+								className={`text-xs ${error ? "text-danger font-bold" : "text-muted-foreground "}`}
+							>
+								{error ? error : "Upload an image"}
 							</p>
 						</div>
 
 						<div className="flex gap-3 border-t border-border/40 px-6 py-4">
 							<button
 								onClick={close}
-								className="flex-1 rounded-xl border px-4 py-3 text-sm"
+								className="flex-1 rounded-xl border px-4 py-3 text-sm hover:bg-muted"
 							>
 								Cancel
 							</button>
@@ -130,7 +138,7 @@ export default function ProfilePicture() {
 							<button
 								onClick={save}
 								disabled={!file || state === "uploading"}
-								className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm text-white hover:bg-primary-hover disabled:opacity-40"
+								className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm cursor-pointer text-white hover:bg-primary-hover disabled:opacity-40  disabled:cursor-not-allowed "
 							>
 								{state === "uploading" ? (
 									<Loader2 className="animate-spin" size={16} />

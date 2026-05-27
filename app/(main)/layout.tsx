@@ -168,14 +168,17 @@ export default function MainLayout({
 							<ThemeToggle />
 
 							{session?.user ? (
-								<button className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground">
-									{/* <Image
-										src={"/DefaultPersonIcon.png"}
-										alt="Person"
-										height={40}
-										width={40}
-									/> */}
-									<CircleUser />
+								<button className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground relative overflow-hidden pointer-events-none">
+									{session.user.image ? (
+										<Image
+											src={session.user.image}
+											alt="Person"
+											sizes="28x28"
+											fill
+										/>
+									) : (
+										<CircleUser />
+									)}
 								</button>
 							) : (
 								<button
