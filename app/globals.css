@@ -120,10 +120,16 @@ html {
 	}
 }
 
-@keyframes FadeIn{
-	from{
+@keyframes FadeIn {
+	from {
 		opacity: 0.1;
 		height: 1%;
 		transform: scaleY(0.1);
+	}
+}
+
+@keyframes HeightUp {
+	from {
+		height: 1%;
 	}
 }

@@ -123,13 +123,7 @@ export default function Page() {
 						</div>
 					</div>
 
-					{/* {error && (
-						<div
-							className={`text-danger text-[0.94rem] font-bold ${fonts.cabin.className} animate-[FadeIn_300ms_ease-out]`}
-						>
-							{error}
-						</div>
-					)} */}
+					
 
 					<div
 						className={`text-danger text-[0.94rem] font-bold ${fonts.cabin.className} ${error ? "animate-[FadeIn_300ms_ease-out]" : ""} min-h-6`}

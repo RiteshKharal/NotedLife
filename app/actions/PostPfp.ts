@@ -12,11 +12,13 @@ export async function PostPfp(formdata: FormData) {
 	if (!file) {
 		return { data: null, error: "No file provided" };
 	}
-	const path = `profile-picture/${Date.now()}-${file.name}`;
+	const path = `profile-picture/${session.user.id}`;
 
 	const { data, error } = await server_supabase.storage
 		.from("profile")
-		.upload(path, file);
+		.upload(path, file,{
+			upsert:true
+		});
 
 	if (error || !data) {
 		return { data: null, error: error?.message || "Upload failed" };

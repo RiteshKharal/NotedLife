@@ -13,8 +13,9 @@ const prisma = new PrismaClient({ adapter });
 export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
-		
+		autoSignIn: true,
 	},
+
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
