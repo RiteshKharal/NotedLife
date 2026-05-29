@@ -31,7 +31,7 @@ NotedLife is a Next.js app built for sharing and interacting with content/media.
 ## 📦 Installation
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone [<repo-url>](https://github.com/RiteshKharal/NotedLife)
 cd notedlife
 
 # Install dependencies
