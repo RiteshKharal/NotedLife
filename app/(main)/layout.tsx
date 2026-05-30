@@ -113,7 +113,7 @@ export default function MainLayout({
 				</aside>
 
 				<div className="flex min-w-0 flex-col pb-20 lg:pb-0">
-					<header className="sticky top-0 z-20 border-b border-border bg-background/88 px-4 py-3 backdrop-blur-xl sm:px-6 lg:px-8">
+					<header className="sticky top-0 z-20 border-b border-border bg-background/88 px-4 py-3 backdrop-blur-xl sm:px-6 lg:px-8 ">
 						<div className="mx-auto flex max-w-6xl items-center gap-3">
 							<div className="mr-1 lg:hidden">
 								<p className="text-lg font-black tracking-tight">NotedLife</p>
@@ -193,7 +193,7 @@ export default function MainLayout({
 
 					{children}
 
-					<nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 px-3 py-2 backdrop-blur-xl lg:hidden">
+					<nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 px-3 py-2 backdrop-blur-xl lg:hidden ">
 						<div className="mx-auto grid max-w-md grid-cols-3 gap-2">
 							{navItems.map((item) => {
 								const Icon = item.icon;

@@ -1,13 +1,18 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
 	Bookmark,
 	EllipsisIcon,
 	MessageCircle,
 	Send,
+	SendHorizonal,
 	ThumbsUp,
 	User,
+	X,
 } from "lucide-react";
+import { useSettleExit } from "../hooks/useSettleExit";
+import { comment, FetchComments } from "../actions/comment";
 
 type PostType = {
 	id: string;
@@ -29,19 +34,69 @@ type PostType = {
 	};
 };
 
-export function PostCard({
-	post,
-	comment,
-}: {
-	post: PostType;
-	comment: () => void;
-}) {
+type CommentsType = {
+	user: {
+		id: string;
+		createdAt: Date;
+		updatedAt: Date;
+		name: string;
+		email: string;
+		image: string | null;
+		emailVerified: boolean;
+	};
+
+	id: string;
+	content: string;
+	createdAt: Date;
+	updatedAt: Date;
+	userId: string;
+	postId: string;
+};
+
+export function PostCard({ post }: { post: PostType }) {
+	const [CommentsBoard, setCommentsBoards] = useState<null | boolean>(null);
+	const CommentsBoardRef = useRef<null | HTMLDivElement>(null);
+	const [comments, setComments] = useState<CommentsType[] | null>(null);
+	const [NumberOfComments, setNumberOfCOmments] = useState<number>(10);
+	const InputRef = useRef<HTMLInputElement | null>(null);
+
+	useSettleExit(CommentsBoardRef, () => {
+		setCommentsBoards(false);
+	});
+
+	const UpdateComments = async () => {
+		const NewData = await FetchComments(post.id, NumberOfComments);
+		setComments(NewData);
+	};
+
+	useEffect(() => {
+		const update = async () => {
+			const NewData = await FetchComments(post.id, NumberOfComments);
+			setComments(NewData);
+		};
+		update();
+	}, [NumberOfComments, post.id]);
+
 	return (
 		<div className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200">
 			<div className="flex items-center justify-between">
 				<div className="flex min-w-0 items-center gap-3">
-					<div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-card2 text-foreground">
-						<User size={20} />
+					<div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-card2 text-foreground overflow-hidden relative">
+						{post.user.image ? (
+							<>
+								<Image
+									src={post.user.image}
+									alt={post.user.name}
+									fill
+									sizes="30x30"
+									loading="eager"
+								></Image>
+							</>
+						) : (
+							<>
+								<User size={20} />
+							</>
+						)}
 					</div>
 
 					<div className="flex min-w-0 flex-col items-start leading-tight">
@@ -49,8 +104,12 @@ export function PostCard({
 							{post.user.name}
 						</h2>
 
-						<p className="text-xs text-foreground/60">
-							{post.createdAt.getDate()}
+						<p className="text-xs text-foreground/60 tracking-wide">
+							{post.createdAt.getFullYear() +
+								"/" +
+								post.createdAt.getMonth() +
+								"/" +
+								post.createdAt.getDate()}
 						</p>
 					</div>
 				</div>
@@ -153,7 +212,7 @@ export function PostCard({
 				<button
 					className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted"
 					onClick={() => {
-						comment();
+						setCommentsBoards(true);
 					}}
 				>
 					<MessageCircle size={20} />
@@ -170,6 +229,110 @@ export function PostCard({
 					<span className="hidden sm:inline">Share</span>
 				</button>
 			</div>
+
+			{CommentsBoard && (
+				<section className="fixed inset-0 z-50 flex items-center justify-center bg-background/55 px-4 backdrop-blur-sm ">
+					<div
+						className="relative flex h-[min(34rem,88vh)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 animate-[PopIn_50ms_ease-in-out] overflow-x-hide overflow-y-scroll scrollbar-none"
+						ref={CommentsBoardRef}
+					>
+						<div className="flex items-center justify-between border-b border-border px-4 py-3">
+							<span className="text-sm font-semibold">Comments</span>
+
+							<button
+								onClick={() => setCommentsBoards(null)}
+								className="rounded-xl p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+								aria-label="Close comments"
+							>
+								<X size={18} />
+							</button>
+						</div>
+
+						<div className="flex-1 overflow-y-auto scrollbar-none px-4 py-4">
+							{comments?.length ? (
+								<div className="flex flex-col gap-4">
+									{comments.map((com) => (
+										<div
+											key={com.id}
+											className="flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-3"
+										>
+											<div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-card2">
+												{com.user.image ? (
+													<Image
+														src={com.user.image}
+														alt={com.user.name}
+														fill
+														loading="eager"
+														sizes="44px"
+														className="object-cover"
+													/>
+												) : (
+													<div className="flex h-full w-full items-center justify-center text-muted-foreground">
+														<User size={18} />
+													</div>
+												)}
+											</div>
+
+											<div className="flex min-w-0 flex-1 flex-col">
+												<div className="flex items-center gap-2">
+													<span className="truncate text-sm font-semibold text-foreground">
+														{com.user.name}
+													</span>
+
+													<span className="text-xs text-muted-foreground">
+														{new Date(com.createdAt).toLocaleDateString()}
+													</span>
+												</div>
+
+												<p className="mt-1 wrap-break-word text-sm leading-relaxed text-foreground/85">
+													{com.content}
+												</p>
+											</div>
+										</div>
+									))}
+								</div>
+							) : (
+								<div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+									No comments yet.
+								</div>
+							)}
+						</div>
+
+						<div className="border-t border-border p-3">
+							<div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10">
+								<input
+									type="text"
+									placeholder="Write a comment..."
+									className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+									ref={InputRef}
+								/>
+
+								<button
+									className="rounded-lg p-2 text-primary transition hover:bg-primary/10"
+									onClick={async () => {
+										const text = InputRef.current?.value;
+										if (
+											!text ||
+											text.trim().length < 1 ||
+											!InputRef.current?.value
+										) {
+											return;
+										}
+										const data = await comment(post, text);
+
+										if (data) {
+											InputRef.current.value = "";
+											UpdateComments();
+										}
+									}}
+								>
+									<SendHorizonal size={18} />
+								</button>
+							</div>
+						</div>
+					</div>
+				</section>
+			)}
 		</div>
 	);
 }
