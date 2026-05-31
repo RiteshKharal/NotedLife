@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import React from "react";
 
 export async function getUserByPostId(id: string) {
 	const user = await prisma.post.findUnique({
@@ -11,5 +10,5 @@ export async function getUserByPostId(id: string) {
 		},
 	});
 
-    return user
+	return user;
 }

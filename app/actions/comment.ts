@@ -34,6 +34,7 @@ export async function comment(post: PostType, text: string) {
 		},
 	});
 
+
 	if (!data) {
 	}
 
@@ -51,6 +52,7 @@ export async function FetchComments(fetchId: string, amount: number = 10) {
 			user: true,
 		},
 		take: amount,
+		skip: 0,
 	});
 
 	return data;

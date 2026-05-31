@@ -2,7 +2,7 @@
 import { Plus, Send, User, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { UserPost } from "@/app/actions/UserPost";
+import { UserPost } from "@/app/actions/MakePost";
 import { GetSession } from "@/app/actions/session";
 import { useRouter } from "next/navigation";
 

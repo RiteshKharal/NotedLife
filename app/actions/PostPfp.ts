@@ -16,8 +16,8 @@ export async function PostPfp(formdata: FormData) {
 
 	const { data, error } = await server_supabase.storage
 		.from("profile")
-		.upload(path, file,{
-			upsert:true
+		.upload(path, file, {
+			upsert: true,
 		});
 
 	if (error || !data) {

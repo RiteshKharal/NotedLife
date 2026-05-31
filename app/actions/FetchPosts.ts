@@ -8,10 +8,15 @@ export async function FetchPosts(amount: number = 10) {
 		include: {
 			// comments: {
 			// 	take: 10,
+			// 	skip: 0,
+			// 	include: {
+			// 		user: {},
+			// 	},
 			// },
 			user: true,
 		},
 		take: amount,
+		skip: 0,
 	});
 
 	return posts;

@@ -7,58 +7,52 @@ import {
 	MessageCircle,
 	Send,
 	SendHorizonal,
+	SendHorizontal,
 	ThumbsUp,
 	User,
 	X,
 } from "lucide-react";
 import { useSettleExit } from "../hooks/useSettleExit";
 import { comment, FetchComments } from "../actions/comment";
+import { CommentType, PostType } from "../types/post";
 
-type PostType = {
-	id: string;
-	description: string | null;
-	media: string[];
-	likesCount: number;
-	sharesCount: number;
-	createdAt: Date;
-	updatedAt: Date;
-	userId: string;
-	user: {
-		id: string;
-		createdAt: Date;
-		updatedAt: Date;
-		name: string;
-		email: string;
-		emailVerified: boolean;
-		image: string | null;
-	};
-};
+// type PostType = {
+// 	id: string;
+// 	createdAt: Date;
+// 	updatedAt: Date;
+// 	userId: string;
+// 	description: string | null;
+// 	media: string[];
+// 	likesCount: number;
+// 	sharesCount: number;
 
-type CommentsType = {
-	user: {
-		id: string;
-		createdAt: Date;
-		updatedAt: Date;
-		name: string;
-		email: string;
-		image: string | null;
-		emailVerified: boolean;
-	};
+// 	comments: {
+// 		id: string;
+// 		content: string;
+// 		createdAt: Date;
+// 		updatedAt: Date;
+// 		userId: string;
+// 		postId: string;
+// 	}[];
 
-	id: string;
-	content: string;
-	createdAt: Date;
-	updatedAt: Date;
-	userId: string;
-	postId: string;
-};
+// 	user: {
+// 		id: string;
+// 		createdAt: Date;
+// 		updatedAt: Date;
+// 		name: string;
+// 		email: string;
+// 		emailVerified: boolean;
+// 		image: string | null;
+// 	};
+// };
 
 export function PostCard({ post }: { post: PostType }) {
 	const [CommentsBoard, setCommentsBoards] = useState<null | boolean>(null);
 	const CommentsBoardRef = useRef<null | HTMLDivElement>(null);
-	const [comments, setComments] = useState<CommentsType[] | null>(null);
-	const [NumberOfComments, setNumberOfCOmments] = useState<number>(10);
+	const [comments, setComments] = useState<CommentType[] | null>(null);
+	const [NumberOfComments, setNumberOfComments] = useState<number>(10);
 	const InputRef = useRef<HTMLInputElement | null>(null);
+	const [SendPending, setSendPending] = useState(false);
 
 	useSettleExit(CommentsBoardRef, () => {
 		setCommentsBoards(false);
@@ -72,6 +66,7 @@ export function PostCard({ post }: { post: PostType }) {
 	useEffect(() => {
 		const update = async () => {
 			const NewData = await FetchComments(post.id, NumberOfComments);
+			// const NewData = post.comments;
 			setComments(NewData);
 		};
 		update();
@@ -299,17 +294,11 @@ export function PostCard({ post }: { post: PostType }) {
 						</div>
 
 						<div className="border-t border-border p-3">
-							<div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10">
-								<input
-									type="text"
-									placeholder="Write a comment..."
-									className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-									ref={InputRef}
-								/>
-
-								<button
-									className="rounded-lg p-2 text-primary transition hover:bg-primary/10"
-									onClick={async () => {
+							<form
+								className=""
+								action={async () => {
+									try {
+										setSendPending(true);
 										const text = InputRef.current?.value;
 										if (
 											!text ||
@@ -322,13 +311,37 @@ export function PostCard({ post }: { post: PostType }) {
 
 										if (data) {
 											InputRef.current.value = "";
-											UpdateComments();
 										}
-									}}
-								>
-									<SendHorizonal size={18} />
-								</button>
-							</div>
+									} finally {
+										setSendPending(false);
+										UpdateComments();
+									}
+								}}
+							>
+								<div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/6">
+									<input
+										type="text"
+										placeholder="Write a comment..."
+										className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+										ref={InputRef}
+									/>
+
+									<button
+										className="rounded-lg p-2 text-primary transition hover:bg-primary/10"
+										type="submit"
+									>
+										{SendPending ? (
+											<>
+												<EllipsisIcon size={18} />
+											</>
+										) : (
+											<>
+												<SendHorizontal size={18} />
+											</>
+										)}
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</section>
