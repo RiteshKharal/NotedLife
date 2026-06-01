@@ -13,8 +13,14 @@ import {
 	X,
 } from "lucide-react";
 import { useSettleExit } from "../hooks/useSettleExit";
-import { comment, FetchComments } from "../actions/comment";
+import {
+	CheckLike,
+	comment,
+	FetchComments,
+	ToggleLike,
+} from "../actions/PostActions";
 import { CommentType, PostType } from "../types/post";
+import { GetSession } from "../actions/session";
 
 // type PostType = {
 // 	id: string;
@@ -53,6 +59,9 @@ export function PostCard({ post }: { post: PostType }) {
 	const [NumberOfComments, setNumberOfComments] = useState<number>(10);
 	const InputRef = useRef<HTMLInputElement | null>(null);
 	const [SendPending, setSendPending] = useState(false);
+	const [liked, setLiked] = useState(false);
+
+	const session = GetSession();
 
 	useSettleExit(CommentsBoardRef, () => {
 		setCommentsBoards(false);
@@ -63,14 +72,28 @@ export function PostCard({ post }: { post: PostType }) {
 		setComments(NewData);
 	};
 
+	const UpdateLiked = async () => {
+		if (!session?.user.id) return;
+		const check = await CheckLike(post.id, session?.user.id);
+
+		if (check) {
+			setLiked(true);
+		} else setLiked(false);
+	};
+
 	useEffect(() => {
-		const update = async () => {
-			const NewData = await FetchComments(post.id, NumberOfComments);
-			// const NewData = post.comments;
-			setComments(NewData);
-		};
-		update();
-	}, [NumberOfComments, post.id]);
+		FetchComments(post.id, NumberOfComments).then(setComments);
+	}, [post.id, NumberOfComments]);
+
+	useEffect(() => {
+		if (!session?.user.id) return;
+
+		CheckLike(post.id, session.user.id).then((data) => {
+			if (data) {
+				setLiked(true);
+			} else setLiked(false);
+		});
+	}, [session?.user.id, post.id]);
 
 	return (
 		<div className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200">
@@ -199,9 +222,21 @@ export function PostCard({ post }: { post: PostType }) {
 			)}
 
 			<div className="mt-4 grid grid-cols-4 items-center justify-between border-t border-border pt-3">
-				<button className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted">
+				<button
+					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-primary hover:bg-primary-hover/10 font-bold" : "hover:bg-muted "}`}
+					onClick={async () => {
+						if (!session?.user.id) {
+							return;
+						}
+						const data = await ToggleLike(post.id, session.user.id);
+
+						if (data) {
+							await UpdateLiked();
+						}
+					}}
+				>
 					<ThumbsUp size={20} />
-					<span className="hidden sm:inline">Like</span>
+					<span className="hidden sm:inline">Like{liked ? "d" : ""} </span>
 				</button>
 
 				<button
@@ -303,11 +338,12 @@ export function PostCard({ post }: { post: PostType }) {
 										if (
 											!text ||
 											text.trim().length < 1 ||
-											!InputRef.current?.value
+											!InputRef.current?.value ||
+											!session?.user.id
 										) {
 											return;
 										}
-										const data = await comment(post, text);
+										const data = await comment(post, session.user.id, text);
 
 										if (data) {
 											InputRef.current.value = "";

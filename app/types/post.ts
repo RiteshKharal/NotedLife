@@ -18,7 +18,14 @@ export type PostType = {
 		image: string | null;
 	};
 
-	// comments: CommentType[];
+	// likes: LikeType[];
+};
+
+export type LikeType = {
+	id: string;
+	createdAt: Date;
+	userId: string;
+	postId: string;
 };
 
 export type CommentType = {

@@ -13,6 +13,7 @@ export async function FetchPosts(amount: number = 10) {
 			// 		user: {},
 			// 	},
 			// },
+			// likes:true,
 			user: true,
 		},
 		take: amount,
