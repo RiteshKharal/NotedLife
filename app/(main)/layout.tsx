@@ -51,7 +51,7 @@ export default function MainLayout({
 	return (
 		<main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground">
 			<section className="mx-auto grid min-h-screen w-full grid-cols-1 lg:grid-cols-[248px_minmax(0,1fr)]">
-				<aside className="sticky top-0 hidden border-r border-border bg-card/70 px-7 py-6 backdrop-blur-xl lg:block">
+				<aside className="hidden border-r border-border bg-card/70 px-7 py-6 backdrop-blur-xl lg:block">
 					<div>
 						<p className="mt-4 text-lg font-black leading-none tracking-wide">
 							NotedLife
@@ -113,7 +113,7 @@ export default function MainLayout({
 				</aside>
 
 				<div className="flex min-w-0 flex-col pb-20 lg:pb-0">
-					<header className="sticky top-0 z-20 border-b border-border bg-background/88 px-4 py-3 backdrop-blur-xl sm:px-6 lg:px-8 ">
+					<header className="z-20 border-b border-border bg-background/88 px-4 py-3 backdrop-blur-xl sm:px-6 lg:px-8 ">
 						<div className="mx-auto flex max-w-6xl items-center gap-3">
 							<div className="mr-1 lg:hidden">
 								<p className="text-lg font-black tracking-tight">NotedLife</p>
@@ -131,7 +131,7 @@ export default function MainLayout({
 
 							<button
 								className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-background transition hover:bg-primary-hover active:scale-[0.98] sm:w-auto sm:px-4 gap-1"
-								onClick={() => router.push("/post")}
+								onClick={() => router.push("/create")}
 								aria-label="New post"
 							>
 								<Plus size={18} />

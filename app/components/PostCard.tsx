@@ -6,7 +6,6 @@ import {
 	EllipsisIcon,
 	MessageCircle,
 	Send,
-	SendHorizonal,
 	SendHorizontal,
 	ThumbsUp,
 	User,
@@ -21,45 +20,17 @@ import {
 } from "../actions/PostActions";
 import { CommentType, PostType } from "../types/post";
 import { GetSession } from "../actions/session";
-
-// type PostType = {
-// 	id: string;
-// 	createdAt: Date;
-// 	updatedAt: Date;
-// 	userId: string;
-// 	description: string | null;
-// 	media: string[];
-// 	likesCount: number;
-// 	sharesCount: number;
-
-// 	comments: {
-// 		id: string;
-// 		content: string;
-// 		createdAt: Date;
-// 		updatedAt: Date;
-// 		userId: string;
-// 		postId: string;
-// 	}[];
-
-// 	user: {
-// 		id: string;
-// 		createdAt: Date;
-// 		updatedAt: Date;
-// 		name: string;
-// 		email: string;
-// 		emailVerified: boolean;
-// 		image: string | null;
-// 	};
-// };
+import { useRouter } from "next/navigation";
 
 export function PostCard({ post }: { post: PostType }) {
 	const [CommentsBoard, setCommentsBoards] = useState<null | boolean>(null);
 	const CommentsBoardRef = useRef<null | HTMLDivElement>(null);
 	const [comments, setComments] = useState<CommentType[] | null>(null);
-	const [NumberOfComments, setNumberOfComments] = useState<number>(10);
+	const [NumberOfComments] = useState<number>(10);
 	const InputRef = useRef<HTMLInputElement | null>(null);
 	const [SendPending, setSendPending] = useState(false);
 	const [liked, setLiked] = useState(false);
+	const router = useRouter();
 
 	const session = GetSession();
 
@@ -96,7 +67,12 @@ export function PostCard({ post }: { post: PostType }) {
 	}, [session?.user.id, post.id]);
 
 	return (
-		<div className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200">
+		<div
+			className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200"
+			onClick={() => {
+				router.push(`/post/${post.id}`);
+			}}
+		>
 			<div className="flex items-center justify-between">
 				<div className="flex min-w-0 items-center gap-3">
 					<div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-card2 text-foreground overflow-hidden relative">
@@ -224,7 +200,9 @@ export function PostCard({ post }: { post: PostType }) {
 			<div className="mt-4 grid grid-cols-4 items-center justify-between border-t border-border pt-3">
 				<button
 					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-primary hover:bg-primary-hover/10 font-bold" : "hover:bg-muted "}`}
-					onClick={async () => {
+					onClick={async (e) => {
+						e.stopPropagation();
+						e.preventDefault();
 						if (!session?.user.id) {
 							return;
 						}
@@ -241,7 +219,9 @@ export function PostCard({ post }: { post: PostType }) {
 
 				<button
 					className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted"
-					onClick={() => {
+					onClick={(e) => {
+						e.stopPropagation();
+						e.preventDefault();
 						setCommentsBoards(true);
 					}}
 				>
@@ -261,7 +241,13 @@ export function PostCard({ post }: { post: PostType }) {
 			</div>
 
 			{CommentsBoard && (
-				<section className="fixed inset-0 z-50 flex items-center justify-center bg-background/55 px-4 backdrop-blur-sm ">
+				<section
+					className="fixed inset-0 z-50 flex items-center justify-center bg-background/55 px-4 backdrop-blur-sm "
+					onClick={(e) => {
+						e.stopPropagation();
+						e.preventDefault();
+					}}
+				>
 					<div
 						className="relative flex h-[min(34rem,88vh)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 animate-[PopIn_50ms_ease-in-out] overflow-x-hide overflow-y-scroll scrollbar-none"
 						ref={CommentsBoardRef}
@@ -270,7 +256,9 @@ export function PostCard({ post }: { post: PostType }) {
 							<span className="text-sm font-semibold">Comments</span>
 
 							<button
-								onClick={() => setCommentsBoards(null)}
+								onClick={(e) => {
+									setCommentsBoards(null);
+								}}
 								className="rounded-xl p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
 								aria-label="Close comments"
 							>

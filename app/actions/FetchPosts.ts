@@ -22,3 +22,16 @@ export async function FetchPosts(amount: number = 10) {
 
 	return posts;
 }
+
+export async function FetchPostById(postId: string) {
+	const post = await prisma.post.findUnique({
+		where: {
+			id: postId,
+		},
+		include: {
+			user: true,
+		},
+	});
+
+	return post;
+}

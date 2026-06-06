@@ -12,7 +12,7 @@ export default function Page() {
 	const ImageInputRef = useRef<HTMLInputElement | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [pending, setPending] = useState(false);
-	const router = useRouter()
+	const router = useRouter();
 
 	const session = GetSession();
 
@@ -45,8 +45,7 @@ export default function Page() {
 						);
 					} finally {
 						setPending(false);
-						router.push("/")
-
+						router.push("/");
 					}
 				}}
 			>
