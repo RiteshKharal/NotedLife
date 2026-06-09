@@ -102,3 +102,49 @@ export async function CheckLike(postId: string, userId: string) {
 
 	return exists;
 }
+
+export async function ToggleSave(postId: string, userId: string) {
+	const exists = await prisma.save.findUnique({
+		where: {
+			userId_postId: {
+				userId: userId,
+				postId: postId,
+			},
+		},
+	});
+
+	if (!exists) {
+		const data = await prisma.save.create({
+			data: {
+				userId: userId,
+				postId: postId,
+			},
+		});
+
+		return data;
+	} else {
+		const data = await prisma.save.delete({
+			where: {
+				userId_postId: {
+					userId: userId,
+					postId: postId,
+				},
+			},
+		});
+
+		return data;
+	}
+}
+
+export async function CheckSave(postId: string, userId: string) {
+	const exists = await prisma.save.findUnique({
+		where: {
+			userId_postId: {
+				userId: userId,
+				postId: postId,
+			},
+		},
+	});
+
+	return exists;
+}

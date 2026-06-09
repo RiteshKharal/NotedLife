@@ -26,9 +26,24 @@ model User {
   comments Comment[]
   posts    Post[]
   likes    Like[]
+  saves    Save[]
 
   @@unique([email])
   @@map("user")
+}
+
+model Save {
+  id Int @id @default(autoincrement())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
 }
 
 model Post {
@@ -48,6 +63,7 @@ model Post {
 
   comments Comment[]
   likes    Like[]
+  saves    Save[]
 
   @@index([userId])
   @@index([createdAt])

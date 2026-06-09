@@ -21,6 +21,8 @@
 	--color-success: hsl(var(--success));
 	--color-warning: hsl(var(--warning));
 	--color-danger: hsl(var(--danger));
+
+	--color-saved: hsl(var(--saved));
 }
 
 :root {
@@ -42,6 +44,8 @@
 	--success: 142 71% 45%;
 	--warning: 38 92% 50%;
 	--danger: 0 84% 60%;
+
+	--saved: 41 96% 40%;
 }
 
 .dark {
@@ -63,6 +67,8 @@
 	--success: 142 70% 45%;
 	--warning: 38 92% 55%;
 	--danger: 0 84% 60%;
+
+	--saved: 48 96% 53%;
 }
 
 body {

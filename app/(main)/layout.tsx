@@ -49,7 +49,7 @@ export default function MainLayout({
 	];
 
 	return (
-		<main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground">
+		<main className="min-h-screen w-full overflow-hidden bg-background text-foreground">
 			<section className="mx-auto grid min-h-screen w-full grid-cols-1 lg:grid-cols-[248px_minmax(0,1fr)]">
 				<aside className="hidden border-r border-border bg-card/70 px-7 py-6 backdrop-blur-xl lg:block">
 					<div>
@@ -119,7 +119,7 @@ export default function MainLayout({
 								<p className="text-lg font-black tracking-tight">NotedLife</p>
 							</div>
 
-							<label className="hidden h-11 min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-3 text-sm shadow-sm shadow-black/[0.02] transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10 sm:flex">
+							<label className="hidden h-11 min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-3 text-sm shadow-sm shadow-black/2 transition focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10 sm:flex">
 								<Search size={18} className="shrink-0 text-muted-foreground" />
 
 								<input
@@ -191,7 +191,9 @@ export default function MainLayout({
 						</div>
 					</header>
 
-					{children}
+					<main className="h-screen overflow-y-scroll scrollbar-none">
+						{children}
+					</main>
 
 					<nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 px-3 py-2 backdrop-blur-xl lg:hidden ">
 						<div className="mx-auto grid max-w-md grid-cols-3 gap-2">

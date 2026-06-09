@@ -14,9 +14,11 @@ import {
 import { useSettleExit } from "../hooks/useSettleExit";
 import {
 	CheckLike,
+	CheckSave,
 	comment,
 	FetchComments,
 	ToggleLike,
+	ToggleSave,
 } from "../actions/PostActions";
 import { CommentType, PostType } from "../types/post";
 import { GetSession } from "../actions/session";
@@ -30,6 +32,7 @@ export function PostCard({ post }: { post: PostType }) {
 	const InputRef = useRef<HTMLInputElement | null>(null);
 	const [SendPending, setSendPending] = useState(false);
 	const [liked, setLiked] = useState(false);
+	const [saved, setSaved] = useState(false);
 	const router = useRouter();
 
 	const session = GetSession();
@@ -45,11 +48,23 @@ export function PostCard({ post }: { post: PostType }) {
 
 	const UpdateLiked = async () => {
 		if (!session?.user.id) return;
-		const check = await CheckLike(post.id, session?.user.id);
+		const check = await CheckLike(post.id, session.user.id);
 
 		if (check) {
 			setLiked(true);
 		} else setLiked(false);
+	};
+
+	const UpdateSave = async () => {
+		if (!session?.user.id) return;
+
+		const exists = await CheckSave(post.id, session.user.id);
+
+		if (exists) {
+			setSaved(true);
+		} else {
+			setSaved(false);
+		}
 	};
 
 	useEffect(() => {
@@ -64,12 +79,18 @@ export function PostCard({ post }: { post: PostType }) {
 				setLiked(true);
 			} else setLiked(false);
 		});
+
+		CheckSave(post.id, session.user.id).then((data) => {
+			if (data) {
+				setSaved(true);
+			} else setSaved(false);
+		});
 	}, [session?.user.id, post.id]);
 
 	return (
 		<div
 			className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200"
-			onClick={() => {
+			onMouseUp={() => {
 				router.push(`/post/${post.id}`);
 			}}
 		>
@@ -229,9 +250,21 @@ export function PostCard({ post }: { post: PostType }) {
 					<span className="hidden sm:inline">Comment</span>
 				</button>
 
-				<button className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted">
+				<button
+					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted ${saved ? "text-saved" : ""}`}
+					onClick={async (e) => {
+						e.stopPropagation();
+						e.preventDefault();
+
+						if (!session?.user) return;
+
+						await ToggleSave(post.id, session?.user.id);
+
+						UpdateSave();
+					}}
+				>
 					<Bookmark size={20} />
-					<span className="hidden sm:inline">Save</span>
+					<span className="hidden sm:inline">{saved ? "Saved" : "Save"}</span>
 				</button>
 
 				<button className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted">
