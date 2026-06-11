@@ -67,6 +67,21 @@ export function PostCard({ post }: { post: PostType }) {
 		}
 	};
 
+	async function HandleShare() {
+		if (typeof window === "undefined") return;
+
+		const url = `post/${post.id}`;
+
+		if (navigator.share) {
+			await navigator.share({ title: "NotedLife post", url });
+			return;
+		}
+
+		await navigator.clipboard.writeText(url);
+		// setShareCopied(true);
+		// window.setTimeout(() => setShareCopied(false), 1800);
+	}
+
 	useEffect(() => {
 		FetchComments(post.id, NumberOfComments).then(setComments);
 	}, [post.id, NumberOfComments]);
@@ -89,8 +104,8 @@ export function PostCard({ post }: { post: PostType }) {
 
 	return (
 		<div
-			className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200"
-			onMouseUp={() => {
+			className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200 cursor-pointer"
+			onDoubleClick={() => {
 				router.push(`/post/${post.id}`);
 			}}
 		>
@@ -267,7 +282,10 @@ export function PostCard({ post }: { post: PostType }) {
 					<span className="hidden sm:inline">{saved ? "Saved" : "Save"}</span>
 				</button>
 
-				<button className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted">
+				<button
+					className="flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition hover:bg-muted"
+					onClick={HandleShare}
+				>
 					<Send size={20} />
 					<span className="hidden sm:inline">Share</span>
 				</button>

@@ -101,6 +101,7 @@ textarea {
 
 * {
 	border-color: hsl(var(--border));
+	scrollbar-color: var(--foreground) transparent;
 }
 
 html {
@@ -137,5 +138,12 @@ html {
 @keyframes HeightUp {
 	from {
 		height: 1%;
+	}
+}
+
+@keyframes GlobalNotification {
+	100% {
+		opacity: 0;
+		transform: translate(0, -20);
 	}
 }

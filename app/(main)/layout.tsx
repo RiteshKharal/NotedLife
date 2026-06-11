@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { ThemeToggle } from "../components/ThemeToggle";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSettleExit } from "../hooks/useSettleExit";
 import { usePathname, useRouter } from "next/navigation";
 import { GetSession } from "../actions/session";
@@ -26,6 +26,12 @@ export default function MainLayout({
 	const pathname = usePathname();
 	const notificationRef = useRef<HTMLDivElement | null>(null);
 	const session = GetSession();
+	const [SessionLoaded, setSessionLoaded] = useState(false);
+
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setSessionLoaded(Boolean(session?.user));
+	}, [session?.user]);
 
 	useSettleExit(notificationRef, () => {
 		setNotificationActive(false);
@@ -167,31 +173,35 @@ export default function MainLayout({
 
 							<ThemeToggle />
 
-							{session?.user ? (
-								<button className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground relative overflow-hidden pointer-events-none">
-									{session.user.image ? (
-										<Image
-											src={session.user.image}
-											alt="Person"
-											sizes="28x28"
-											fill
-										/>
-									) : (
-										<CircleUser />
-									)}
-								</button>
+							{SessionLoaded ? (
+								session?.user ? (
+									<button className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground relative overflow-hidden pointer-events-none">
+										{session.user.image ? (
+											<Image
+												src={session.user.image}
+												alt="Person"
+												sizes="28x28"
+												fill
+											/>
+										) : (
+											<CircleUser />
+										)}
+									</button>
+								) : (
+									<button
+										className="hidden h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground transition hover:bg-muted active:scale-[0.99] md:flex"
+										onClick={() => router.push("/signup")}
+									>
+										Sign up
+									</button>
+								)
 							) : (
-								<button
-									className="hidden h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground transition hover:bg-muted active:scale-[0.99] md:flex"
-									onClick={() => router.push("/signup")}
-								>
-									Sign up
-								</button>
+								<></>
 							)}
 						</div>
 					</header>
 
-					<main className="h-screen overflow-y-scroll scrollbar-none">
+					<main className="max-h-screen overflow-y-scroll scrollbar-none overflow-x-hidden">
 						{children}
 					</main>
 

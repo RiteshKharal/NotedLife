@@ -441,10 +441,10 @@ export default function Page() {
 
 				<section className="grid gap-4 px-4 py-4 sm:px-5 ">
 					<form
-						className="rounded-xl bg-background/70 p-2 "
+						className="rounded-xl bg-background/70 mt-5"
 						onSubmit={handleCommentSubmit}
 					>
-						<div className=" flex items-center gap-2 rounded-lg border border-border bg-card py-2 pl-3 pr-1.5 transition focus-within:border-primary/6 focus-within:ring-4 focus-within:ring-primary/10">
+						<div className=" flex items-center gap-2 rounded-lg border border-border bg-card py-2.5 pl-3 pr-1.5 transition focus-within:border-primary/6 focus-within:ring-4 focus-within:ring-primary/10">
 							<input
 								id="comment"
 								type="text"

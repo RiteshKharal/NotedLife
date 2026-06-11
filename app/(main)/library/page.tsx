@@ -7,6 +7,7 @@ import { PostType } from "@/app/types/post";
 import { Bookmark, ImageIcon, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+
 export default function Home() {
 	const session = GetSession();
 	const [posts, setPosts] = useState<PostType[] | null>();
@@ -31,7 +32,7 @@ export default function Home() {
 
 	if (typeof posts === "undefined" || !session?.user) {
 		return (
-			<div className="min-h-screen flex items-center justify-center">
+			<div className="max-h-screen min-h-screen h-full flex items-center justify-center">
 				<div className="flex flex-col items-center gap-3">
 					<Loader2 className="h-10 w-10 animate-spin rounded-full border-t-primary" />
 					<p className="text-sm text-muted-foreground">Loading library...</p>
@@ -40,9 +41,9 @@ export default function Home() {
 		);
 	}
 
-	if (!posts) {
+	if (!posts || posts.length < 1) {
 		return (
-			<div className="min-h-screen flex items-center justify-center px-4">
+			<div className=" h-screen flex items-center justify-center px-4 overflow-y-hidden w-full overflow-x-hidden">
 				<div className="text-center max-w-sm">
 					<div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
 						<ImageIcon size={22} />
@@ -60,7 +61,7 @@ export default function Home() {
 
 	return (
 		<div className="w-full max-h-screen overflow-y-scroll scrollbar-none bg-background px-4 sm:px-6 lg:px-10 py-8">
-				{/* <div className="flex items-center gap-3">
+			{/* <div className="flex items-center gap-3">
 					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
 						<Bookmark size={18} />
 					</div>
@@ -73,11 +74,11 @@ export default function Home() {
 					</div>
 				</div> */}
 
-				<div className="flex flex-col gap-5 items-center">
-					{posts?.map((post) => (
-						<PostCard post={post} key={post.id} />
-					))}
-				</div>
+			<div className="flex flex-col gap-5 items-center">
+				{posts?.map((post) => (
+					<PostCard post={post} key={post.id} />
+				))}
 			</div>
+		</div>
 	);
 }
