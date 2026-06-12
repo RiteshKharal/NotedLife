@@ -3,14 +3,21 @@
 import { FetchSaved } from "@/app/actions/SaveActions";
 import { GetSession } from "@/app/actions/session";
 import { PostCard } from "@/app/components/PostCard";
+import { useNotification } from "@/app/hooks/useGlobalNotification";
 import { PostType } from "@/app/types/post";
 import { Bookmark, ImageIcon, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-
 export default function Home() {
 	const session = GetSession();
 	const [posts, setPosts] = useState<PostType[] | null>();
+	const { notify } = useNotification();
+	const [SessionLoaded, setSessionLoaded] = useState(false);
+
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setSessionLoaded(Boolean(session?.user));
+	}, [session?.user]);
 
 	useEffect(() => {
 		const load = async () => {
@@ -24,12 +31,16 @@ export default function Home() {
 				setPosts(dt);
 			} catch (e) {
 				setPosts(null);
+				notify({ message: "Could not fetch saved media" });
 			}
 		};
 
 		load();
-	}, [session?.user]);
+	}, [notify, session?.user]);
 
+	if (SessionLoaded && !session?.user) {
+		notify({ message: "Sign in to view saved media!" });
+	}
 	if (typeof posts === "undefined" || !session?.user) {
 		return (
 			<div className="max-h-screen min-h-screen h-full flex items-center justify-center">

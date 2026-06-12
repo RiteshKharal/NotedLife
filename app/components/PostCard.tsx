@@ -48,11 +48,15 @@ export function PostCard({ post }: { post: PostType }) {
 
 	const UpdateLiked = async () => {
 		if (!session?.user.id) return;
-		const check = await CheckLike(post.id, session.user.id);
+		try {
+			const check = await CheckLike(post.id, session.user.id);
 
-		if (check) {
-			setLiked(true);
-		} else setLiked(false);
+			if (check) {
+				setLiked(true);
+			} else setLiked(false);
+		} catch (er) {
+			console.warn("An error occured while checking like");
+		}
 	};
 
 	const UpdateSave = async () => {
@@ -78,8 +82,6 @@ export function PostCard({ post }: { post: PostType }) {
 		}
 
 		await navigator.clipboard.writeText(url);
-		// setShareCopied(true);
-		// window.setTimeout(() => setShareCopied(false), 1800);
 	}
 
 	useEffect(() => {
@@ -104,7 +106,7 @@ export function PostCard({ post }: { post: PostType }) {
 
 	return (
 		<div
-			className="w-full rounded-2xl border border-border p-4 sm:p-5 lg:max-w-200 cursor-pointer"
+			className="w-full bg-card rounded-2xl border-2 border-border p-4 sm:p-5 lg:max-w-200"
 			onDoubleClick={() => {
 				router.push(`/post/${post.id}`);
 			}}

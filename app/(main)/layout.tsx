@@ -16,6 +16,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSettleExit } from "../hooks/useSettleExit";
 import { usePathname, useRouter } from "next/navigation";
 import { GetSession } from "../actions/session";
+import { Session } from "inspector/promises";
+import { useNotification } from "../hooks/useGlobalNotification";
 
 export default function MainLayout({
 	children,
@@ -27,6 +29,7 @@ export default function MainLayout({
 	const notificationRef = useRef<HTMLDivElement | null>(null);
 	const session = GetSession();
 	const [SessionLoaded, setSessionLoaded] = useState(false);
+	const { notify } = useNotification();
 
 	useEffect(() => {
 		// eslint-disable-next-line react-hooks/set-state-in-effect
@@ -135,16 +138,20 @@ export default function MainLayout({
 								/>
 							</label>
 
-							<button
-								className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-background transition hover:bg-primary-hover active:scale-[0.98] sm:w-auto sm:px-4 gap-1"
-								onClick={() => router.push("/create")}
-								aria-label="New post"
-							>
-								<Plus size={18} />
-								<span className="hidden text-sm font-semibold sm:inline">
-									New post
-								</span>
-							</button>
+							{SessionLoaded && session?.user && (
+								<button
+									className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-background transition hover:bg-primary-hover active:scale-[0.98] sm:w-auto sm:px-4 gap-1"
+									onClick={() => {
+										router.push("/create");
+									}}
+									aria-label="New post"
+								>
+									<Plus size={18} />
+									<span className="hidden text-sm font-semibold sm:inline">
+										New post
+									</span>
+								</button>
+							)}
 
 							<div className="relative" ref={notificationRef}>
 								<button

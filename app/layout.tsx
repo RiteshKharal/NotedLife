@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProviderWrapper } from "./providers/ThemeProvider";
+import { NotificationProvider } from "./hooks/useGlobalNotification";
 
 export const metadata: Metadata = {
 	title: "NotedLife",
@@ -20,7 +21,9 @@ export default function RootLayout({
 			data-scroll-behavior="smooth"
 		>
 			<body className="min-h-full flex flex-col">
-				<ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+				<ThemeProviderWrapper>
+					<NotificationProvider>{children}</NotificationProvider>
+				</ThemeProviderWrapper>
 			</body>
 		</html>
 	);
