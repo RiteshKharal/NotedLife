@@ -29,9 +29,9 @@ export function GetSession() {
 	const [session, setSession] = useState<SessionType | null>(null);
 
 	useEffect(() => {
-		AuthClient.getSession().then(({ data }) => {
-			setSession(data);
-		});
+	AuthClient.getSession().then(({ data }) => {
+		setSession(data);
+	});
 	}, []);
 
 	return session;

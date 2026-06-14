@@ -295,14 +295,14 @@ export function PostCard({ post }: { post: PostType }) {
 
 			{CommentsBoard && (
 				<section
-					className="fixed inset-0 z-50 flex items-center justify-center bg-background/55 px-4 backdrop-blur-sm "
+					className="fixed inset-0 z-50 flex items-center justify-center bg-background/2 px-4 backdrop-blur-sm "
 					onClick={(e) => {
 						e.stopPropagation();
 						e.preventDefault();
 					}}
 				>
 					<div
-						className="relative flex h-[min(34rem,88vh)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 animate-[PopIn_50ms_ease-in-out] overflow-x-hide overflow-y-scroll scrollbar-none"
+						className="relative flex h-[min(34rem,88vh)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 animate-[PopIn_50ms_ease-in-out] overflow-x-hide overflow-y-scroll scrollbar-none"
 						ref={CommentsBoardRef}
 					>
 						<div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -319,7 +319,7 @@ export function PostCard({ post }: { post: PostType }) {
 							</button>
 						</div>
 
-						<div className="flex-1 overflow-y-auto scrollbar-none px-4 py-4">
+						<div className="flex-1 overflow-y-auto scrollbar-thin px-4 py-4">
 							{comments?.length ? (
 								<div className="flex flex-col gap-4">
 									{comments.map((com) => (

@@ -546,7 +546,7 @@ export default function Page() {
 									))}
 								</div>
 							) : (
-								<div className="flex min-h-32 items-center justify-center rounded-xl border border-dashed border-border bg-muted/20 px-4 text-center text-sm text-muted-foreground">
+								<div className="flex min-h-32 items-center justify-center rounded-xl px-4 text-center text-sm text-muted-foreground">
 									No comments yet. Start the conversation.
 								</div>
 							)}
