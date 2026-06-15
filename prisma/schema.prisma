@@ -17,7 +17,7 @@ model User {
   name          String   @default("Guest")
   email         String
   emailVerified Boolean  @default(false)
-  image         String?
+  image         String   @default("/DefaultProfilePicture.png")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

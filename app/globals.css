@@ -140,10 +140,3 @@ html {
 		height: 1%;
 	}
 }
-
-@keyframes GlobalNotification {
-	100% {
-		opacity: 0;
-		transform: translate(0, -20);
-	}
-}

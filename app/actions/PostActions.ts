@@ -1,26 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-
-type PostType = {
-	id: string;
-	description: string | null;
-	media: string[];
-	likesCount: number;
-	sharesCount: number;
-	createdAt: Date;
-	updatedAt: Date;
-	userId: string;
-	user: {
-		id: string;
-		createdAt: Date;
-		updatedAt: Date;
-		name: string;
-		email: string;
-		emailVerified: boolean;
-		image: string | null;
-	};
-};
+import { PostType } from "../types/post";
 
 export async function comment(post: PostType, userId: string, text: string) {
 	const data = await prisma.comment.create({

@@ -24,7 +24,7 @@ export async function PostPfp(formdata: FormData) {
 		return { data: null, error: error?.message || "Upload failed" };
 	}
 
-	const PublicURL = await server_supabase.storage
+	const PublicURL = server_supabase.storage
 		.from("profile")
 		.getPublicUrl(data.path).data.publicUrl;
 

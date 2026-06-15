@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/lib/prisma";
 
 export async function getUserByPostId(id: string) {
@@ -7,6 +9,16 @@ export async function getUserByPostId(id: string) {
 		},
 		include: {
 			user: true,
+		},
+	});
+
+	return user;
+}
+
+export async function getUserByUserId(id: string) {
+	const user = await prisma.user.findUnique({
+		where: {
+			id: id,
 		},
 	});
 

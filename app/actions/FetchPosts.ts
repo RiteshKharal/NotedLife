@@ -23,6 +23,19 @@ export async function FetchPosts(amount: number = 10) {
 	return posts;
 }
 
+export async function FetchUserPosts({ id }: { id: string }) {
+	const posts = await prisma.post.findMany({
+		where: {
+			userId: id,
+		},
+		include: {
+			user: true,
+		},
+	});
+
+	return posts;
+}
+
 export async function FetchPostById(postId: string) {
 	const post = await prisma.post.findUnique({
 		where: {

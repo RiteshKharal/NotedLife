@@ -15,7 +15,7 @@ export type PostType = {
 		name: string;
 		email: string;
 		emailVerified: boolean;
-		image: string | null;
+		image: string ;
 	};
 
 	// likes: LikeType[];
