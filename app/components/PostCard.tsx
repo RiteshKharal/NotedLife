@@ -296,7 +296,7 @@ export function PostCard({ post }: { post: PostType }) {
 			{CommentsBoard && (
 				<section
 					className="fixed inset-0 z-50 flex items-center justify-center bg-background/2 px-4 backdrop-blur-sm "
-					onClick={(e) => {
+					onDoubleClick={(e) => {
 						e.stopPropagation();
 						e.preventDefault();
 					}}
@@ -369,12 +369,13 @@ export function PostCard({ post }: { post: PostType }) {
 							)}
 						</div>
 
-						<div className="border-t border-border p-3">
+						<div className="border-t border-border p-3 z-120">
 							<form
 								className=""
-								action={async () => {
+								onSubmit={async (e) => {
 									try {
 										setSendPending(true);
+
 										const text = InputRef.current?.value;
 										if (
 											!text ||
@@ -382,6 +383,7 @@ export function PostCard({ post }: { post: PostType }) {
 											!InputRef.current?.value ||
 											!session?.user.id
 										) {
+											console.warn("Can't comment");
 											return;
 										}
 										const data = await comment(post, session.user.id, text);
@@ -389,6 +391,8 @@ export function PostCard({ post }: { post: PostType }) {
 										if (data) {
 											InputRef.current.value = "";
 										}
+									} catch (er) {
+										console.warn("Failed to comment");
 									} finally {
 										setSendPending(false);
 										UpdateComments();

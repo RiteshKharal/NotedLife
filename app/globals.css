@@ -49,19 +49,19 @@
 }
 
 .dark {
-	--background: 222 22% 8%;
+	--background: 222 22% 4%;
 	--foreground: 216 18% 92%;
 
 	--primary: 214 86% 62%;
 	--primary-hover: 214 86% 68%;
 
-	--card: 222 20% 11%;
-	--card-secondary: 222 16% 16%;
+	--card: 222 20% 6%;
+	--card-secondary: 222 16% 10%;
 
 	--muted: 222 16% 17%;
 	--muted-foreground: 216 10% 68%;
 
-	--border: 222 14% 20%;
+	--border: 222 14% 14%;
 	--border-hard: 222 10% 30%;
 
 	--success: 142 70% 45%;
