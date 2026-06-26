@@ -2,7 +2,13 @@
 
 import { getUserByUserId } from "@/app/actions/UserActions";
 import { UserType } from "@/app/types/user";
-import { ArrowLeft, CalendarDays, FileText } from "lucide-react";
+import {
+	ArrowLeft,
+	CalendarDays,
+	FileText,
+	ImageIcon,
+	Plus,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -161,28 +167,52 @@ export default function Page() {
 								</div>
 							</div>
 						</div>
-						{/* 
-						<div className="flex gap-4">
-							<div className="rounded-2xl border bg-background/60 px-6 py-4 backdrop-blur">
-								<div className="flex items-center gap-2 text-muted-foreground">
-									<FileText size={15} />
-									Posts
-								</div>
 
-								<div className="mt-1 text-3xl font-bold">
-									{posts?.length ?? 0}
+							{/* <div className="flex gap-4">
+								<div className="rounded-2xl border bg-background/60 px-6 py-4 backdrop-blur">
+									<div className="flex items-center gap-2 text-muted-foreground">
+										<Plus size={15} />
+										New post
+									</div>
 								</div>
-							</div>
-						</div> */}
+							</div> */}
+					</div>
+				</div>
+			</div>
+
+			<div className="mt-5 w-full rounded-2xl border border-border bg-card/85 backdrop-blur-2xl shadow-sm">
+				<div className="p-5">
+					<input
+						type="text"
+						placeholder="What's on your mind?"
+						className="h-12 w-full rounded-xl border border-transparent bg-card2 px-4 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/20"
+					/>
+
+					<div className="mt-4 flex items-center justify-between">
+						<div className="flex items-center gap-2">
+							<button
+								type="button"
+								className="flex h-10 w-10 items-center justify-center rounded-xl text-green-500 transition-colors hover:bg-green-500/10"
+							>
+								<ImageIcon size={20} />
+							</button>
+
+							<span className="text-sm text-muted-foreground">Add photo</span>
+						</div>
+
+						<button
+							type="submit"
+							className="rounded-xl bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Post
+						</button>
 					</div>
 				</div>
 			</div>
 
 			<div className="mt-10">
 				<div className="mb-6 flex items-center justify-between">
-					<div>
-						<h2 className="text-2xl font-bold">Posts</h2>
-					</div>
+					<div>{/* <h2 className="text-2xl font-bold">Posts</h2> */}</div>
 				</div>
 
 				<div className="flex flex-col gap-6 px-3">

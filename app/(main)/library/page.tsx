@@ -2,7 +2,7 @@
 
 import { FetchSaved } from "@/app/actions/SaveActions";
 import { GetSession } from "@/app/actions/session";
-import { PostCard } from "@/app/components/PostCard";
+import { PostCard, PostCardFull } from "@/app/components/PostCard";
 import { useNotification } from "@/app/hooks/useGlobalNotification";
 import { PostType } from "@/app/types/post";
 import { Bookmark, ImageIcon, Loader2 } from "lucide-react";
@@ -85,9 +85,9 @@ export default function Home() {
 					</div>
 				</div> */}
 
-			<div className="flex flex-col gap-5 items-center">
+			<div className="flex flex-col gap-5 items-center w-full">
 				{posts?.map((post) => (
-					<PostCard post={post} key={post.id} />
+					<PostCardFull post={post} key={post.id} className={``} />
 				))}
 			</div>
 		</div>
