@@ -8,6 +8,7 @@
 
 	--color-primary: hsl(var(--primary));
 	--color-primary-hover: hsl(var(--primary-hover));
+	--color-primary-foreground: hsl(var(--primary-foreground));
 
 	--color-card: hsl(var(--card));
 	--color-card2: hsl(var(--card-secondary));
@@ -26,48 +27,52 @@
 }
 
 :root {
-	--background: 210 24% 97%;
-	--foreground: 222 22% 12%;
+	--background: 0 0% 98%;
+	--foreground: 0 0% 8%;
 
-	--primary: 218 76% 52%;
-	--primary-hover: 218 76% 46%;
+	--primary: 0 0% 8%;
+	--primary-hover: 0 0% 18%;
+	--primary-foreground: 0 0% 98%;
 
 	--card: 0 0% 96%;
-	--card-secondary: 214 24% 95%;
+	--card-secondary: 0 0% 94%;
 
-	--muted: 214 24% 93%;
-	--muted-foreground: 218 10% 43%;
+	--muted: 0 0% 92%;
+	--muted-foreground: 0 0% 42%;
 
-	--border: 214 20% 88%;
-	--border-hard: 214 16% 80%;
+	--border: 0 0% 88%;
+	--border-hard: 0 0% 78%;
 
 	--success: 142 71% 45%;
 	--warning: 38 92% 50%;
 	--danger: 0 84% 60%;
 
+	--liked: 218 76% 52%;
 	--saved: 41 96% 40%;
 }
 
 .dark {
-	--background: 222 22% 4%;
-	--foreground: 216 18% 92%;
+	--background: 0 0% 4%;
+	--foreground: 0 0% 92%;
 
-	--primary: 214 86% 62%;
-	--primary-hover: 214 86% 68%;
+	--primary: 0 0% 96%;
+	--primary-hover: 0 0% 86%;
+	--primary-foreground: 0 0% 6%;
 
-	--card: 222 20% 7%;
-	--card-secondary: 222 16% 10%;
+	--card: 0 0% 7%;
+	--card-secondary: 0 0% 10%;
 
-	--muted: 222 16% 17%;
-	--muted-foreground: 216 10% 68%;
+	--muted: 0 0% 17%;
+	--muted-foreground: 0 0% 68%;
 
-	--border: 222 14% 14%;
-	--border-hard: 222 10% 30%;
+	--border: 0 0% 14%;
+	--border-hard: 0 0% 30%;
 
 	--success: 142 70% 45%;
 	--warning: 38 92% 55%;
 	--danger: 0 84% 60%;
 
+	--liked: 214 86% 62%;
 	--saved: 48 96% 53%;
 }
 

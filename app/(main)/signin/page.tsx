@@ -106,7 +106,7 @@ export default function Page() {
 
 					<button
 						type="submit"
-						className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
+						className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover active:scale-[0.99]"
 					>
 						{pending ? (
 							<>

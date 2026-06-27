@@ -242,7 +242,7 @@ export function PostCard({ post, ...props }: PostCardPropTypes) {
 
 			<div className="mt-4 grid grid-cols-4 items-center justify-between border-t border-border pt-3">
 				<button
-					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-primary hover:bg-primary-hover/10 font-bold" : "hover:bg-muted "}`}
+					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-liked hover:bg-liked-hover/10 font-bold" : "hover:bg-muted "}`}
 					onClick={async (e) => {
 						e.stopPropagation();
 						e.preventDefault();
@@ -571,8 +571,8 @@ export function PostCardFull({ post, ...props }: PostCardPropTypes) {
 			</div>
 
 			{post.media.length > 0 && (
-				<div className="mt-4 -mx-4 sm:-mx-5 overflow-hidden">
-					<div className="grid w-full overflow-hidden sm:h-100 sm:grid-cols-[2fr_auto]">
+				<div className="mt-4 -mx-4 sm:-mx-5 overflow-hidden px-3">
+					<div className="grid w-full overflow-hidden sm:h-100 sm:grid-cols-[2fr_1fr]">
 						{post.media.length === 1 && (
 							<div className="overflow-hidden border-y border-border col-span-2">
 								<Image
@@ -655,7 +655,7 @@ export function PostCardFull({ post, ...props }: PostCardPropTypes) {
 
 			<div className="mt-4 grid grid-cols-4 items-center justify-between border-t border-border pt-3">
 				<button
-					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-primary hover:bg-primary-hover/10 font-bold" : "hover:bg-muted "}`}
+					className={`flex min-h-10 items-center justify-center gap-2 rounded-xl px-2 text-sm font-medium transition   ${liked ? "text-liked hover:bg-liked-hover/10 font-bold" : "hover:bg-muted "}`}
 					onClick={async (e) => {
 						e.stopPropagation();
 						e.preventDefault();

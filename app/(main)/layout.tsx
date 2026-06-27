@@ -144,7 +144,7 @@ export default function MainLayout({
 								/>
 							</label>
 
-							{SessionLoaded && session?.user && (
+							{/* {SessionLoaded && session?.user && (
 								<button
 									className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-background transition hover:bg-primary-hover active:scale-[0.98] sm:w-auto sm:px-4 gap-1"
 									onClick={() => {
@@ -157,7 +157,7 @@ export default function MainLayout({
 										New post
 									</span>
 								</button>
-							)}
+							)} */}
 
 							<div className="relative" ref={notificationRef}>
 								<button

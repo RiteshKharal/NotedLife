@@ -138,7 +138,7 @@ export default function ProfilePicture() {
 							<button
 								onClick={save}
 								disabled={!file || state === "uploading"}
-								className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm cursor-pointer text-white hover:bg-primary-hover disabled:opacity-40  disabled:cursor-not-allowed "
+								className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm cursor-pointer text-primary-foreground hover:bg-primary-hover disabled:opacity-40  disabled:cursor-not-allowed "
 							>
 								{state === "uploading" ? (
 									<Loader2 className="animate-spin" size={16} />

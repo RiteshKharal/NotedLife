@@ -10,16 +10,20 @@ import {
 	Plus,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import * as fonts from "@/app/fonts";
 import { PostType } from "@/app/types/post";
 import { FetchUserPosts } from "@/app/actions/FetchPosts";
-import { PostCard } from "@/app/components/PostCard";
+import { PostCard, PostCardFull } from "@/app/components/PostCard";
+import { UserPost } from "@/app/actions/MakePost";
+import { GetSession } from "@/app/actions/session";
 
 export default function Page() {
 	const params = useParams<{ UserId: string }>();
 	const userId = params.UserId;
+	const PostTextRef = useRef<HTMLInputElement | null>(null);
+	const session = GetSession();
 
 	const router = useRouter();
 
@@ -115,16 +119,6 @@ export default function Page() {
 
 	return (
 		<div className="mx-auto max-w-6xl px-4 py-8">
-			{/* <div className="mb-6">
-				<button
-					onClick={() => router.back()}
-					className="flex items-center gap-2 rounded-xl border bg-card px-4 py-2 transition hover:bg-muted"
-				>
-					<ArrowLeft size={18} />
-					Back
-				</button>
-			</div> */}
-
 			<div className="overflow-hidden rounded-3xl border bg-card shadow-sm">
 				<div className="relative h-72 overflow-hidden">
 					<Image
@@ -167,48 +161,53 @@ export default function Page() {
 								</div>
 							</div>
 						</div>
-
-							{/* <div className="flex gap-4">
-								<div className="rounded-2xl border bg-background/60 px-6 py-4 backdrop-blur">
-									<div className="flex items-center gap-2 text-muted-foreground">
-										<Plus size={15} />
-										New post
-									</div>
-								</div>
-							</div> */}
 					</div>
 				</div>
 			</div>
 
-			<div className="mt-5 w-full rounded-2xl border border-border bg-card/85 backdrop-blur-2xl shadow-sm">
-				<div className="p-5">
-					<input
-						type="text"
-						placeholder="What's on your mind?"
-						className="h-12 w-full rounded-xl border border-transparent bg-card2 px-4 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/20"
-					/>
+			{session?.user.id === userId && (
+				<div className="mt-5 w-full rounded-2xl border border-border bg-card/85 backdrop-blur-2xl shadow-sm">
+					<div className="p-5">
+						<input
+							type="text"
+							placeholder="What's on your mind?"
+							className="h-12 w-full rounded-xl border border-transparent bg-card2 px-4 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-primary/20"
+							ref={PostTextRef}
+						/>
 
-					<div className="mt-4 flex items-center justify-between">
-						<div className="flex items-center gap-2">
-							<button
-								type="button"
-								className="flex h-10 w-10 items-center justify-center rounded-xl text-green-500 transition-colors hover:bg-green-500/10"
+						<div className="mt-4 flex items-center justify-between ">
+							<div
+								className="flex items-center gap-2 hover:bg-muted p-1 px-3 rounded-2xl"
+								onClick={() => {
+									router.push("/create");
+								}}
 							>
-								<ImageIcon size={20} />
+								<button
+									type="button"
+									className="flex h-10 w-10 items-center justify-center rounded-xl text-green-500 transition-colors hover:bg-green-500/10"
+								>
+									<ImageIcon size={20} />
+								</button>
+
+								<span className="text-sm text-muted-foreground">Add photo</span>
+							</div>
+
+							<button
+								type="submit"
+								className="rounded-xl bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+								onClick={async () => {
+									const text = PostTextRef.current?.value;
+									if (!text) return;
+
+									const data = await UserPost(text, null, (er) => {});
+								}}
+							>
+								Post
 							</button>
-
-							<span className="text-sm text-muted-foreground">Add photo</span>
 						</div>
-
-						<button
-							type="submit"
-							className="rounded-xl bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							Post
-						</button>
 					</div>
 				</div>
-			</div>
+			)}
 
 			<div className="mt-10">
 				<div className="mb-6 flex items-center justify-between">
@@ -217,7 +216,7 @@ export default function Page() {
 
 				<div className="flex flex-col gap-6 px-3">
 					{posts?.length ? (
-						posts.map((post) => <PostCard key={post.id} post={post} />)
+						posts.map((post) => <PostCardFull key={post.id} post={post} />)
 					) : (
 						<div className="rounded-3xl border bg-card py-24 text-center">
 							<div className="mx-auto max-w-md">

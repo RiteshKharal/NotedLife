@@ -144,7 +144,7 @@ export default function Page() {
 
 						<button
 							type="submit"
-							className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99]"
+							className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover active:scale-[0.99]"
 						>
 							{pending ? (
 								<>Posting...</>
