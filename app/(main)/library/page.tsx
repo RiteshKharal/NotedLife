@@ -72,22 +72,10 @@ export default function Home() {
 
 	return (
 		<div className="w-full max-h-screen overflow-y-scroll scrollbar-none bg-background px-4 sm:px-6 lg:px-10 py-8">
-			{/* <div className="flex items-center gap-3">
-					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-						<Bookmark size={18} />
-					</div>
-
-					<div>
-						<h1 className="text-2xl font-bold tracking-tight">Library</h1>
-						<p className="text-sm text-muted-foreground">
-							Your saved posts collection
-						</p>
-					</div>
-				</div> */}
 
 			<div className="flex flex-col gap-5 items-center w-full">
 				{posts?.map((post) => (
-					<PostCardFull post={post} key={post.id} className={``} />
+					<PostCardFull post={post} key={post.id} />
 				))}
 			</div>
 		</div>

@@ -177,7 +177,7 @@ export default function Page() {
 
 						<div className="mt-4 flex items-center justify-between ">
 							<div
-								className="flex items-center gap-2 hover:bg-muted p-1 px-3 rounded-2xl"
+								className="flex items-center gap-2 hover:bg-muted p-1 px-2 rounded-2xl cursor-pointer"
 								onClick={() => {
 									router.push("/create");
 								}}

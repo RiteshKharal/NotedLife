@@ -23,6 +23,7 @@
 	--color-warning: hsl(var(--warning));
 	--color-danger: hsl(var(--danger));
 
+	--color-liked: hsl(var(--liked));
 	--color-saved: hsl(var(--saved));
 }
 
