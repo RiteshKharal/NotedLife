@@ -2,22 +2,16 @@
 
 import { FetchSaved } from "@/app/actions/SaveActions";
 import { GetSession } from "@/app/actions/session";
-import { PostCard, PostCardFull } from "@/app/components/PostCard";
+import { PostCardFull } from "@/app/components/PostCard";
 import { useNotification } from "@/app/hooks/useGlobalNotification";
 import { PostType } from "@/app/types/post";
 import { Bookmark, ImageIcon, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-	const session = GetSession();
+	const { session, isPending } = GetSession();
 	const [posts, setPosts] = useState<PostType[] | null>();
 	const { notify } = useNotification();
-	const [SessionLoaded, setSessionLoaded] = useState(false);
-
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setSessionLoaded(Boolean(session?.user));
-	}, [session?.user]);
 
 	useEffect(() => {
 		const load = async () => {
@@ -38,10 +32,36 @@ export default function Home() {
 		load();
 	}, [notify, session?.user]);
 
-	if (SessionLoaded && !session?.user) {
-		notify({ message: "Sign in to view saved media!" });
+	if (isPending) {
+		return (
+			<div className="max-h-screen min-h-screen h-full flex items-center justify-center">
+				<div className="flex flex-col items-center gap-3">
+					<Loader2 className="h-10 w-10 animate-spin rounded-full border-t-primary" />
+					<p className="text-sm text-muted-foreground">Loading library...</p>
+				</div>
+			</div>
+		);
 	}
-	if (typeof posts === "undefined" || !session?.user) {
+
+	if (!session?.user) {
+		return (
+			<div className=" h-screen flex items-center justify-center px-4 overflow-y-hidden w-full overflow-x-hidden">
+				<div className="text-center max-w-sm">
+					<div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
+						<Bookmark size={22} />
+					</div>
+
+					<h3 className="mt-4 text-base font-semibold">Sign in required</h3>
+
+					<p className="mt-2 text-sm text-muted-foreground leading-6">
+						Sign in to view your saved posts.
+					</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (typeof posts === "undefined") {
 		return (
 			<div className="max-h-screen min-h-screen h-full flex items-center justify-center">
 				<div className="flex flex-col items-center gap-3">

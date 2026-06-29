@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 import ProfilePicture from "./components/ProfilePicture";
-
+import * as font from "@/app/fonts";
 import { Palette, Star } from "lucide-react";
+import { AuthClient } from "@/lib/auth-client";
+import { useNotification } from "@/app/hooks/useGlobalNotification";
 
 export default function Page() {
+	const { notify } = useNotification();
+	const [SigningOut, setSigningOut] = useState(false);
+
 	return (
 		<div className="w-full px-4 py-6 sm:px-6 lg:px-8">
 			<div className="mx-auto flex max-w-3xl flex-col gap-6">
@@ -51,7 +56,7 @@ export default function Page() {
 						<h2 className="text-sm font-semibold">Account</h2>
 					</div>
 
-					<section className="flex flex-col mb-5">
+					<section className="flex flex-col mb-5 gap-5">
 						<div className="flex items-center justify-between gap-3 px-5 py-6">
 							<div className="flex gap-3">
 								<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card2 text-muted-foreground">
@@ -82,6 +87,35 @@ export default function Page() {
 							</div>
 						</div>
 					</section>
+				</section>
+
+				<section>
+					<button
+						className={` p-3 px-4 rounded-xl shadow-[0_0_1px] shadow-danger float-right ${SigningOut ? "bg-danger/45 cursor-progress!" : "bg-danger cursor-pointer"}`}
+						onClick={async () => {
+							if (SigningOut) return;
+
+							await AuthClient.signOut({
+								fetchOptions: {
+									onSuccess: () => {
+										window.location.href = "/";
+									},
+									onError: () => {
+										notify({ message: "Couldn't log out!" });
+									},
+									onRequest: () => {
+										setSigningOut(true);
+									},
+								},
+							});
+						}}
+					>
+						<span
+							className={`font-bold text-background ${font.cabin.className}`}
+						>
+							Sign Out
+						</span>
+					</button>
 				</section>
 			</div>
 		</div>

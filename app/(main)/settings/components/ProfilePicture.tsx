@@ -11,7 +11,7 @@ type State = "idle" | "uploading";
 
 export default function ProfilePicture() {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const session = GetSession()
+	const { session } = GetSession();
 
 	const [open, setOpen] = useState(false);
 	const [state, setState] = useState<State>("idle");

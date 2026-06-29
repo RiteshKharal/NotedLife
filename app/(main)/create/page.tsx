@@ -14,7 +14,7 @@ export default function Page() {
 	const [pending, setPending] = useState(false);
 	const router = useRouter();
 
-	const session = GetSession();
+	const { session } = GetSession();
 
 	useEffect(() => {
 		const urls = images.map((img) => URL.createObjectURL(img));

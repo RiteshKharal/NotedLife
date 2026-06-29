@@ -26,13 +26,33 @@ type SessionType = {
 } | null;
 
 export function GetSession() {
-	const [session, setSession] = useState<SessionType | null>(null);
+	const [session, setSession] = useState<SessionType>(null);
+	const [isPending, setIsPending] = useState(true);
 
 	useEffect(() => {
-	AuthClient.getSession().then(({ data }) => {
-		setSession(data);
-	});
+		let active = true;
+
+		AuthClient.getSession()
+			.then(({ data }) => {
+				if (active) {
+					setSession(data);
+				}
+			})
+			.catch(() => {
+				if (active) {
+					setSession(null);
+				}
+			})
+			.finally(() => {
+				if (active) {
+					setIsPending(false);
+				}
+			});
+
+		return () => {
+			active = false;
+		};
 	}, []);
 
-	return session;
+	return { session, isPending };
 }

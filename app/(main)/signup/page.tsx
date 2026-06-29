@@ -9,7 +9,7 @@ import * as fonts from "@/app/fonts";
 import { ValidateFormData } from "@/app/logics/Validator";
 export default function Page() {
 	const router = useRouter();
-	const session = GetSession();
+	const { session } = GetSession();
 	const [pending, setPending] = useState(false);
 	const [error, setError] = useState<null | string>(null);
 
@@ -48,7 +48,7 @@ export default function Page() {
 		if (session?.user) {
 			router.push("/");
 		}
-	}, [router, session]);
+	}, [router, session?.user]);
 
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">

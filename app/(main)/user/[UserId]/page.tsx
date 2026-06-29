@@ -23,7 +23,7 @@ export default function Page() {
 	const params = useParams<{ UserId: string }>();
 	const userId = params.UserId;
 	const PostTextRef = useRef<HTMLInputElement | null>(null);
-	const session = GetSession();
+	const { session } = GetSession();
 
 	const router = useRouter();
 

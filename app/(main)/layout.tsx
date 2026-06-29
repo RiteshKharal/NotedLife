@@ -27,16 +27,11 @@ export default function MainLayout({
 	const [NotificationActive, setNotificationActive] = useState<boolean>(false);
 	const pathname = usePathname();
 	const notificationRef = useRef<HTMLDivElement | null>(null);
-	const session = GetSession();
-	const [SessionLoaded, setSessionLoaded] = useState(false);
+	const { session, isPending } = GetSession();
+
 	const [ProfileSettings, setProfileSettings] = useState(false);
 	const ProfileRef = useRef<HTMLDivElement | null>(null);
 	const { notify } = useNotification();
-
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setSessionLoaded(Boolean(session?.user));
-	}, [session?.user]);
 
 	useSettleExit(notificationRef, () => {
 		setNotificationActive(false);
@@ -186,71 +181,64 @@ export default function MainLayout({
 
 							<ThemeToggle />
 
-							{SessionLoaded ? (
-								session?.user ? (
-									<div ref={ProfileRef}>
-										<button
-											className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground relative overflow-hidden  cursor-pointer"
-											onClick={() => {
-												setProfileSettings((p) => !p);
-											}}
-										>
-											{session.user.image ? (
-												<Image
-													src={session.user.image}
-													alt="Person"
-													sizes="28x28"
-													fill
-												/>
-											) : (
-												<CircleUser />
-											)}
-										</button>
-
-										{ProfileSettings && (
-											<section className=" absolute right-4 top-16 w-52 overflow-hidden rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-xl shadow-black/10 p-2 z-50 ">
-												<button
-													className=" flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-muted "
-													onClick={() => {
-														router.push(`user/${session.user.id}`);
-
-														setProfileSettings(false);
-													}}
-												>
-													<User size={18} className="text-muted-foreground" />
-
-													<span>Profile</span>
-												</button>
-
-												<div className="my-1 h-px bg-border" />
-
-												<button
-													className=" flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-muted "
-													onClick={() => {
-														router.push("/settings");
-														setProfileSettings(false);
-													}}
-												>
-													<Settings
-														size={18}
-														className="text-muted-foreground"
-													/>
-
-													<span>Settings</span>
-												</button>
-											</section>
-										)}
-									</div>
-								) : (
+							{isPending ? null : session?.user ? (
+								<div ref={ProfileRef}>
 									<button
-										className="hidden h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground transition hover:bg-muted active:scale-[0.99] md:flex"
-										onClick={() => router.push("/signup")}
+										className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm shadow-black/2 transition hover:bg-muted hover:text-foreground relative overflow-hidden  cursor-pointer"
+										onClick={() => {
+											setProfileSettings((p) => !p);
+										}}
 									>
-										Sign up
+										{session.user.image ? (
+											<Image
+												src={session.user.image}
+												alt="Person"
+												sizes="28x28"
+												fill
+											/>
+										) : (
+											<CircleUser />
+										)}
 									</button>
-								)
+
+									{ProfileSettings && (
+										<section className=" absolute right-4 top-16 w-52 overflow-hidden rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-xl shadow-black/10 p-2 z-50 ">
+											<button
+												className=" flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-muted "
+												onClick={() => {
+													router.push(`user/${session.user.id}`);
+
+													setProfileSettings(false);
+												}}
+											>
+												<User size={18} className="text-muted-foreground" />
+
+												<span>Profile</span>
+											</button>
+
+											<div className="my-1 h-px bg-border" />
+
+											<button
+												className=" flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-muted "
+												onClick={() => {
+													router.push("/settings");
+													setProfileSettings(false);
+												}}
+											>
+												<Settings size={18} className="text-muted-foreground" />
+
+												<span>Settings</span>
+											</button>
+										</section>
+									)}
+								</div>
 							) : (
-								<></>
+								<button
+									className="hidden h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground transition hover:bg-muted active:scale-[0.99] md:flex"
+									onClick={() => router.push("/signup")}
+								>
+									Sign up
+								</button>
 							)}
 						</div>
 					</header>

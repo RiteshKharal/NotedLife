@@ -10,7 +10,7 @@ import { ValidateFormData } from "@/app/logics/Validator";
 
 export default function Page() {
 	const router = useRouter();
-	const session = GetSession();
+	const { session } = GetSession();
 	const [error, setError] = useState<string | null>(null);
 	const [pending, setPending] = useState(false);
 
@@ -44,7 +44,7 @@ export default function Page() {
 		if (session?.user) {
 			router.push("/");
 		}
-	}, [router, session]);
+	}, [router, session?.user]);
 
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">

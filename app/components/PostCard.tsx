@@ -39,7 +39,7 @@ export function PostCard({ post, ...props }: PostCardPropTypes) {
 	const [saved, setSaved] = useState(false);
 	const router = useRouter();
 
-	const session = GetSession();
+	const { session, isPending } = GetSession();
 
 	useSettleExit(CommentsBoardRef, () => {
 		setCommentsBoards(false);
@@ -378,6 +378,9 @@ export function PostCard({ post, ...props }: PostCardPropTypes) {
 							<form
 								className=""
 								onSubmit={async (e) => {
+									e.preventDefault();
+									e.stopPropagation();
+
 									try {
 										setSendPending(true);
 
@@ -447,7 +450,7 @@ export function PostCardFull({ post, ...props }: PostCardPropTypes) {
 	const [saved, setSaved] = useState(false);
 	const router = useRouter();
 
-	const session = GetSession();
+	const { session } = GetSession();
 
 	useSettleExit(CommentsBoardRef, () => {
 		setCommentsBoards(false);
@@ -791,6 +794,9 @@ export function PostCardFull({ post, ...props }: PostCardPropTypes) {
 							<form
 								className=""
 								onSubmit={async (e) => {
+									e.preventDefault();
+									e.stopPropagation();
+
 									try {
 										setSendPending(true);
 

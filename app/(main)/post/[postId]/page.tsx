@@ -42,7 +42,7 @@ export default function Page() {
 	const router = useRouter();
 	const params = useParams<{ postId: string }>();
 	const postId = params.postId;
-	const session = GetSession();
+	const { session } = GetSession();
 
 	const commentInputRef = useRef<HTMLInputElement | null>(null);
 	const [post, setPost] = useState<PostType | null>();
@@ -117,10 +117,12 @@ export default function Page() {
 	}, [post, session?.user.id]);
 
 	useEffect(() => {
-		if (!post || !session?.user) return;
+		const userId = session?.user?.id;
+		if (!post || !userId) return;
+
 		let active = true;
 
-		CheckSave(post.id, session.user.id).then((data) => {
+		CheckSave(post.id, userId).then((data) => {
 			if (active) {
 				setSaved(Boolean(data));
 			}
@@ -129,7 +131,7 @@ export default function Page() {
 		return () => {
 			active = false;
 		};
-	}, [post, session?.user]);
+	}, [post, session?.user?.id]);
 
 	async function updateComments() {
 		if (!post) return;
